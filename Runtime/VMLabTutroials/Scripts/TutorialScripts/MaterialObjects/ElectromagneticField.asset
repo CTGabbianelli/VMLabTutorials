@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e86c094d67115149883b628e143a737, type: 3}
+  m_Name: ElectromagneticField
+  m_EditorClassIdentifier: 
+  maskPosition: {x: -215.5, y: -82.2, z: 0}
+  maskWidthAndHeight: {x: 867.1, y: 364}
+  maskAnchorMin: {x: 0.5, y: 0.5}
+  maskAnchorMax: {x: 0.5, y: 0.5}
+  maskPivot: {x: 0.5, y: 0.5}
+  panelPosition: {x: 507.7, y: -40, z: 0}
+  panelWidthAndHeight: {x: 500, y: 241.1}
+  panelAnchorMin: {x: 0.5, y: 0.5}
+  panelAnchorMax: {x: 0.5, y: 0.5}
+  panelPivot: {x: 0.5, y: 0.5}
+  trianglePosition: {x: -251, y: 5, z: 0}
+  triangleWidthAndHeight: {x: 20, y: 20}
+  triangleAnchorMin: {x: 0.5, y: 0.5}
+  triangleAnchorMax: {x: 0.5, y: 0.5}
+  trianglePivot: {x: 0.5, y: 0.5}
+  triangleRotation: {x: -0, y: 0, z: 44.999996}
+  titleTextPosition: {x: 25, y: -6, z: 0}
+  titleTextWidthAndHeight: {x: 300.2, y: 50}
+  titleTextAnchorMin: {x: 0, y: 1}
+  titleTextAnchorMax: {x: 0, y: 1}
+  titleTextPivot: {x: 0, y: 1}
+  titleText: Electromagnetic Field
+  titleFontSize: 25.3
+  informationTextPosition: {x: 0, y: 8.55, z: 0}
+  informationTextWidthAndHeight: {x: -50, y: 97.4}
+  informationTextAnchorMin: {x: 0, y: 0.5}
+  informationTextAnchorMax: {x: 1, y: 0.5}
+  informationTextPivot: {x: 0.5, y: 0.5}
+  informationText: Top-down view of the continuous-wave behavior of the electric
+    or magnetic  vector field component
+  informationFontSize: 23.4
