@@ -1,0 +1,20 @@
+{
+  "name": "com.vmlab.tutorialslibrary",
+  "version": "1.0.0",
+  "displayName": "VMLab Tutorials",
+  "description": "An updatable library of tutorials for VMLab projects.",
+  "unity": "2019.4",
+  "dependencies": {
+    "com.unity.textmeshpro" : "2.1.3"
+  },
+  "keywords": [
+    "tutorial",
+    "utility",
+    "simulationss"
+  ],
+  "author": {
+    "name": "Virtual Manufacturing Lab",
+    "email": "",
+    "url": ""
+  }
+}
