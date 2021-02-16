@@ -1,0 +1,8 @@
+v0.1.2:
+ - Fix shadow size calculation. As a result, shadow should no longer be clipped
+ - Documentation button on True Shadow component now lead to the correct site instead of Unity's generic scripting page
+ - Some minor fixes and performance optimization
+
+v0.1.1:
+ - Fix Shadow not show up immediately
+ - Fix Addictive Blend mode
