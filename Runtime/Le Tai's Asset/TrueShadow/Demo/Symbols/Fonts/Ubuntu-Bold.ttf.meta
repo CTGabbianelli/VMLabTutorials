@@ -11,7 +11,10 @@ TrueTypeFontImporter:
   fontName: Ubuntu
   fontNames:
   - Ubuntu
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {instanceID: 0}
+  - {instanceID: 0}
+  - {instanceID: 0}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
