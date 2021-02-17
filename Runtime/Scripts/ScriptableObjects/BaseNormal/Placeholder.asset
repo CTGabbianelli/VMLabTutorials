@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dab58dede6e0774e9e13002b3addbfe, type: 3}
+  m_Name: Placeholder
+  m_EditorClassIdentifier: 
+  maskPosition: {x: -281, y: 211, z: 0}
+  maskWidthAndHeight: {x: 706.2, y: 270}
+  maskAnchorMin: {x: 0.5, y: 0.5}
+  maskAnchorMax: {x: 0.5, y: 0.5}
+  maskPivot: {x: 0.5, y: 0.5}
+  panelPosition: {x: 562, y: -40, z: 0}
+  panelWidthAndHeight: {x: 500, y: 315.5}
+  panelAnchorMin: {x: 0.5, y: 0.5}
+  panelAnchorMax: {x: 0.5, y: 0.5}
+  panelPivot: {x: 0.5, y: 0.5}
+  trianglePosition: {x: -251, y: 5, z: 0}
+  triangleWidthAndHeight: {x: 20, y: 20}
+  triangleAnchorMin: {x: 0.5, y: 0.5}
+  triangleAnchorMax: {x: 0.5, y: 0.5}
+  trianglePivot: {x: 0.5, y: 0.5}
+  triangleRotation: {x: -0, y: 0, z: 44.999996}
+  titleTextPosition: {x: 25, y: -30, z: 0}
+  titleTextWidthAndHeight: {x: 300.2, y: 0}
+  titleTextAnchorMin: {x: 0, y: 1}
+  titleTextAnchorMax: {x: 0, y: 1}
+  titleTextPivot: {x: 0, y: 1}
+  titleText: Test
+  titleFontSize: 28
+  informationTextPosition: {x: 0, y: 17.5, z: 0}
+  informationTextWidthAndHeight: {x: -50, y: -195}
+  informationTextAnchorMin: {x: 0, y: 0}
+  informationTextAnchorMax: {x: 1, y: 1}
+  informationTextPivot: {x: 0.5, y: 0.5}
+  informationText: Holder
+  informationFontSize: 23.4

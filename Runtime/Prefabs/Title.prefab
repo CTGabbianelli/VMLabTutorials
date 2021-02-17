@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2842473500134824057}
   - component: {fileID: 2842473500134824059}
   m_Layer: 5
-  m_Name: TitleWithTutorial
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,11 +30,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1884706533468591800}
   - {fileID: 2842473500545218386}
-  - {fileID: 2842473501554048127}
   - {fileID: 2842473501491552325}
+  - {fileID: 2842473501554048127}
   - {fileID: 3854435271722870261}
+  - {fileID: 1884706533468591800}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -134,7 +134,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2842473500134824056}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -170,8 +170,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Wavelength
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: af609e4909c032d4199d8e27fee5b361, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: af609e4909c032d4199d8e27fee5b361, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -266,7 +266,7 @@ RectTransform:
   m_Children:
   - {fileID: 5591486749826683906}
   m_Father: {fileID: 2842473500134824056}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -339,8 +339,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Waveguide Fundamentals
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: af609e4909c032d4199d8e27fee5b361, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: af609e4909c032d4199d8e27fee5b361, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -518,10 +518,12 @@ MonoBehaviour:
   closeSprite: {fileID: 21300000, guid: 4aab93fb35cd00f4b8316bdfc25f56c6, type: 3}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   hoveredColor: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 1}
-  menu: {fileID: 0}
-  deviceInfoPanel: {fileID: 0}
+  menu: {fileID: 3223953989742650167, guid: acfaeac669e63824d92b7b1715d86ca1, type: 3}
+  deviceInfoPanel: {fileID: 357955351584414890, guid: acfaeac669e63824d92b7b1715d86ca1,
+    type: 3}
   isOpen: 0
-  tutorial: {fileID: 0}
+  tutorial: {fileID: 8963349094279062019, guid: acfaeac669e63824d92b7b1715d86ca1,
+    type: 3}
   secondaryUsed: 0
 --- !u!114 &5591486749826683907
 MonoBehaviour:
@@ -635,11 +637,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2842473500134824056}
-  m_RootOrder: 0
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 455, y: 0}
+  m_AnchoredPosition: {x: 448, y: 0}
   m_SizeDelta: {x: 2, y: 52}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4573747402848520188
@@ -754,7 +756,7 @@ PrefabInstance:
     - target: {fileID: 8504642802924659217, guid: d8c736507569c77458e5403940f44780,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8504642802924659217, guid: d8c736507569c77458e5403940f44780,
         type: 3}

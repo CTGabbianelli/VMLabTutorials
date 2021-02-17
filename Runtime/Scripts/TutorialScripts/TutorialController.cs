@@ -57,7 +57,11 @@ public class TutorialController : MonoBehaviour
     }
     public void Initialize()
     {
-        CreateMap();
+        if(mapTutorials.Count != 0)
+        {
+            CreateMap();
+        }
+
         tutorialMarkerIcon.Initialize(baseTutorialPresets.Count);
 
         if (PlayerPrefs.GetString("Tutorial Completed") != "Completed")
