@@ -2592,8 +2592,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3601970475700426089, guid: acfaeac669e63824d92b7b1715d86ca1,
-          type: 3}
+      - m_Target: {fileID: 0}
         m_MethodName: SelectDeviceInformation
         m_Mode: 1
         m_Arguments:
@@ -3232,7 +3231,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -526.5, y: -561}
+  m_AnchoredPosition: {x: -526, y: -561}
   m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 1, y: 1}
 --- !u!1 &5825968587582868335
@@ -3889,8 +3888,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3601970475700426089, guid: acfaeac669e63824d92b7b1715d86ca1,
-          type: 3}
+      - m_Target: {fileID: 0}
         m_MethodName: CloseDeviceInformation
         m_Mode: 1
         m_Arguments:

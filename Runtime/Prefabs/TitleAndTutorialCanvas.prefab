@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8963349094212286238}
   - component: {fileID: 8963349094212286237}
   - component: {fileID: 8963349094212286236}
-  - component: {fileID: 8963349094212286235}
   m_Layer: 5
   m_Name: TitleAndTutorialCanvas
   m_TagString: Untagged
@@ -101,18 +100,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &8963349094212286235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8963349094212286234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c569152cec92149ad1d1795b355541, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4548368880993333017
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143,7 +130,7 @@ PrefabInstance:
     - target: {fileID: 1884706533468591800, guid: 073681127cd8e9f4b84b88789944b77d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2842473500134824007, guid: 073681127cd8e9f4b84b88789944b77d,
         type: 3}
@@ -273,7 +260,7 @@ PrefabInstance:
     - target: {fileID: 3854435271722870261, guid: 073681127cd8e9f4b84b88789944b77d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 073681127cd8e9f4b84b88789944b77d, type: 3}
@@ -417,11 +404,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3601970475700426089}
-    - target: {fileID: 5825968587500215936, guid: 2632e252aa1276144bed84a3688bf16d,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -526
-      objectReference: {fileID: 0}
     - target: {fileID: 5825968588416654618, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

@@ -518,12 +518,10 @@ MonoBehaviour:
   closeSprite: {fileID: 21300000, guid: 4aab93fb35cd00f4b8316bdfc25f56c6, type: 3}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
   hoveredColor: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 1}
-  menu: {fileID: 3223953989742650167, guid: acfaeac669e63824d92b7b1715d86ca1, type: 3}
-  deviceInfoPanel: {fileID: 357955351584414890, guid: acfaeac669e63824d92b7b1715d86ca1,
-    type: 3}
+  menu: {fileID: 0}
+  deviceInfoPanel: {fileID: 0}
   isOpen: 0
-  tutorial: {fileID: 8963349094279062019, guid: acfaeac669e63824d92b7b1715d86ca1,
-    type: 3}
+  tutorial: {fileID: 0}
   secondaryUsed: 0
 --- !u!114 &5591486749826683907
 MonoBehaviour:
