@@ -1,6 +1,6 @@
 {
   "name": "com.vmlab.tutorialslibrary",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "displayName": "VMLab Tutorials",
   "description": "An updatable library of tutorials for VMLab projects.",
   "unity": "2019.4",
