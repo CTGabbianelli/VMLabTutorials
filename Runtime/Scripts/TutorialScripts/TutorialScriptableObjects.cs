@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Tutorial", menuName = "ScriptableObjects/TutorialScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "Tutorial", menuName = "ScriptableObjects/TutorialScriptableObjects/BaseTutorial", order = 1)]
 public class TutorialScriptableObjects : ScriptableObject
 {
     [Header("Mask")]

@@ -6,7 +6,12 @@ using TMPro;
 
 public class TutorialController : MonoBehaviour
 {
+    public delegate void TutorialIndexChanged();
+    public static event TutorialIndexChanged tutorialIndexChanged;
+
     public static TutorialController instance;
+
+    public int index;
 
     public GameObject tutorialBG;
     public GameObject baseParent;
@@ -15,6 +20,7 @@ public class TutorialController : MonoBehaviour
     public GameObject mapDotPrefab;
     public bool isOpen;
     public TutorialMarkerIcon tutorialMarkerIcon;
+    public List<TutorialObjectsList> tutorialSets;
     enum Tutorial
     {
         Replay,
@@ -34,7 +40,7 @@ public class TutorialController : MonoBehaviour
     public Animator mapExitButton;
     public Animator mapTutorialPanelAnimator;
     public Animator mapMaskAnimator;
-    int index;
+
     [Header("Base Tutorial Components")]
     public RectTransform maskTransform;
     public RectTransform panelBGTransform;
@@ -48,22 +54,21 @@ public class TutorialController : MonoBehaviour
     public TMP_Text mapTitleText;
     public TMP_Text mapInformationText;
 
-
     // Start is called before the first frame update
     private void Awake()
     {
         //set global reference
         instance = this;
     }
+
     public void Initialize()
     {
+        AddFirstTutorialSet();
+
         if(mapTutorials.Count != 0)
         {
             CreateMap();
         }
-
-        tutorialMarkerIcon.Initialize(baseTutorialPresets.Count);
-
         if (PlayerPrefs.GetString("Tutorial Completed") != "Completed")
         {
             PlayerPrefs.SetString("Tutorial Completed", "Completed");
@@ -76,6 +81,19 @@ public class TutorialController : MonoBehaviour
         }
 
         
+    }
+    void AddFirstTutorialSet()
+    {
+        AddTutorials(0);
+    }
+    void AddTutorials(int index)
+    {
+        foreach (TutorialScriptableObjects o in tutorialSets[index].tutorialSets)
+        {
+            baseTutorialPresets.Add(o);
+        }
+        tutorialMarkerIcon.Initialize(baseTutorialPresets.Count);
+
     }
 
     void CreateMap()
@@ -117,6 +135,8 @@ public class TutorialController : MonoBehaviour
                 print("not completed");
             }
         }
+        tutorialIndexChanged();
+
 
     }
     //skip tutorial by setting index to length of list
@@ -154,6 +174,8 @@ public class TutorialController : MonoBehaviour
             index--;
             SetTutorial(baseTutorialPresets[index]);
             tutorialMarkerIcon.SetMarkerColor(index);
+
+            tutorialIndexChanged();
         }
 
     }

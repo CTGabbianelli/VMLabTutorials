@@ -14,6 +14,14 @@ public class TutorialMarkerIcon : MonoBehaviour
     // Start is called before the first frame update
     public void Initialize(int count)
     {
+        if(markers.Count != 0)
+        {
+            foreach (GameObject o in markers)
+            {
+                Destroy(o);
+            }
+            markers.Clear();
+        }
         localCount = count;
         if (count > 1)
         {

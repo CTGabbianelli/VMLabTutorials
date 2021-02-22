@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Tutorial", menuName = "ScriptableObjects/TutorialMapScriptableObject", order = 2)]
+[CreateAssetMenu(fileName = "Tutorial", menuName = "ScriptableObjects/TutorialScriptableObjects/MapTutorial", order = 2)]
 public class TutorialMapScriptableObject : TutorialScriptableObjects
 {
     [Header("Button Title")]
