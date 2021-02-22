@@ -86,7 +86,7 @@ public class TutorialController : MonoBehaviour
     {
         AddTutorials(0);
     }
-    void AddTutorials(int index)
+    public void AddTutorials(int index)
     {
         foreach (TutorialScriptableObjects o in tutorialSets[index].tutorialSets)
         {
