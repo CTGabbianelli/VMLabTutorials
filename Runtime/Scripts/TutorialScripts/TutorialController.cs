@@ -27,7 +27,6 @@ public class TutorialController : MonoBehaviour
         SimGuide
     }
     Tutorial tutorial;
-    [SerializeField]
     List<TutorialScriptableObjects> baseTutorialPresets;
     [SerializeField]
     List<TutorialMapScriptableObject> mapTutorials;
