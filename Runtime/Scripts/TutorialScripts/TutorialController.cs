@@ -164,6 +164,7 @@ public class TutorialController : MonoBehaviour
         SetTutorial(baseTutorialPresets[index]);
         tutorialMarkerIcon.SetMarkerColor(index);
         SetTutorialActivity(true);
+        tutorialIndexChanged();
     }
 
     //Decrement index and move tutorial back
