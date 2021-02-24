@@ -11,6 +11,8 @@ public class TutorialController : MonoBehaviour
 
     public static TutorialController instance;
 
+    public string playerPrefsString;
+
     public int index;
 
     public GameObject tutorialBG;
@@ -68,11 +70,9 @@ public class TutorialController : MonoBehaviour
         {
             CreateMap();
         }
-        if (PlayerPrefs.GetString("Tutorial Completed") != "Completed")
+        if (PlayerPrefs.GetString(playerPrefsString) != "Completed")
         {
-            PlayerPrefs.SetString("Tutorial Completed", "Completed");
             StartTutorial();
-
         }
         else
         {
@@ -129,6 +129,10 @@ public class TutorialController : MonoBehaviour
             StartCoroutine(DisableBaseElements());
 
             tutorialMarkerIcon.DeactivateMarkers();
+
+            PlayerPrefs.SetString(playerPrefsString, "Completed");
+
+
             if (PlayerPrefs.GetString("Tutorial Completed") != "Completed")
             {
                 print("not completed");
