@@ -60,7 +60,6 @@ public class TutorialController : MonoBehaviour
         //set global reference
         instance = this;
     }
-
     public void Initialize()
     {
         AddFirstTutorialSet();
@@ -180,6 +179,15 @@ public class TutorialController : MonoBehaviour
         }
 
     }
+
+    public void JumpToSpecificTutorial(int index)
+    {
+        StartTutorial();
+        SetTutorial(baseTutorialPresets[index]);
+        tutorialMarkerIcon.SetMarkerColor(index);
+
+        tutorialIndexChanged();
+    }
     //set index to 0 and reset tutorial
     public void ReplayTutorial()
     {
@@ -282,15 +290,7 @@ public class TutorialController : MonoBehaviour
         tutorialMarkerIcon.ActivateMarkers();
         replayTutorialAnimator.SetBool("Active", isActive);
     }
-    //public void SpecificTutorialSelection(int Index)
-    //{
-    //    index = Index;
-    //    if (tutorial == Tutorial.Replay)
-    //    {
-    //        SetTutorial(baseTutorialPresets[index]);
-    //    }
-    //}
-    //set tutorial parameters based on passed in tutorial object
+
     void SetTutorial(TutorialScriptableObjects tut)
     {
         SetMask(tut);
