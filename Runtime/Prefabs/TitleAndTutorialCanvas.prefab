@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8963349094212286238}
   - component: {fileID: 8963349094212286237}
   - component: {fileID: 8963349094212286236}
+  - component: {fileID: 1282239689}
   m_Layer: 5
   m_Name: TitleAndTutorialCanvas
   m_TagString: Untagged
@@ -100,6 +101,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &1282239689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8963349094212286234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c569152cec92149ad1d1795b355541, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4548368880993333017
 PrefabInstance:
   m_ObjectHideFlags: 0
