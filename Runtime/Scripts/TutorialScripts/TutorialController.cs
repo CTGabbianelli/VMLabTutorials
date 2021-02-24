@@ -180,9 +180,10 @@ public class TutorialController : MonoBehaviour
 
     }
 
-    public void JumpToSpecificTutorial(int index)
+    public void JumpToSpecificTutorial(int tempIndex)
     {
         StartTutorial();
+        index = tempIndex;
         SetTutorial(baseTutorialPresets[index]);
         tutorialMarkerIcon.SetMarkerColor(index);
 
