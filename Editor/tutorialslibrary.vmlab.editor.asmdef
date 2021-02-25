@@ -2,7 +2,8 @@
     "name": "tutorialslibrary.vmlab.editor",
     "references": [
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:72819435fd456a14288b1e9c9adccdf8"
+        "GUID:72819435fd456a14288b1e9c9adccdf8",
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
