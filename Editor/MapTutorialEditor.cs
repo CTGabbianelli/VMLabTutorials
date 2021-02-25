@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using TMPro;
 
+#if UNITY_Editor
 public class MapTutorialEditor : EditorWindow
 {
     string informationString;
@@ -130,3 +131,4 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.buttonTitle = buttonTitleText.text;
     }
 }
+#endif

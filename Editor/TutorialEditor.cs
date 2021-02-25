@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+#if UNITY_Editor
 public class TutorialEditor : EditorWindow
 {
     string informationString;
@@ -105,3 +106,4 @@ public class TutorialEditor : EditorWindow
         tutorialObject.informationFontSize = informationText.fontSize;
     }
 }
+#endif
