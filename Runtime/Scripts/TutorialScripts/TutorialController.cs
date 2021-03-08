@@ -9,6 +9,9 @@ public class TutorialController : MonoBehaviour
     public delegate void TutorialIndexChanged();
     public static event TutorialIndexChanged tutorialIndexChanged;
 
+    public delegate void MapOpened();
+    public static event MapOpened mapOpened;
+
     public static TutorialController instance;
 
     public string playerPrefsString;
@@ -66,7 +69,7 @@ public class TutorialController : MonoBehaviour
     {
         AddFirstTutorialSet();
 
-        if(mapTutorials.Count != 0)
+        if (mapTutorials.Count != 0)
         {
             CreateMap();
         }
@@ -79,7 +82,7 @@ public class TutorialController : MonoBehaviour
 
         }
 
-        
+
     }
     void AddFirstTutorialSet()
     {
@@ -117,7 +120,7 @@ public class TutorialController : MonoBehaviour
     public void AdvanceToNextTutorial()
     {
         if (index < baseTutorialPresets.Count - 1)
-        {     
+        {
 
             index++;
             SetTutorial(baseTutorialPresets[index]);
@@ -133,7 +136,7 @@ public class TutorialController : MonoBehaviour
             PlayerPrefs.SetString(playerPrefsString, "Completed");
 
 
-            if (PlayerPrefs.GetString("Tutorial Completed") != "Completed")
+            if (PlayerPrefs.GetString(playerPrefsString) != "Completed")
             {
                 print("not completed");
             }
@@ -158,7 +161,7 @@ public class TutorialController : MonoBehaviour
         SetMapInformation(tut);
         mapTutorialPanelAnimator.SetBool("Active", true);
         StartCoroutine(SetMapButtonActivity(false));
-        
+
     }
 
     public void StartTutorial()
@@ -213,7 +216,7 @@ public class TutorialController : MonoBehaviour
         //start each map button timers to turn on
 
         //set map tutorial fade in animation
-        if(isOpen != true)
+        if (isOpen != true)
         {
 
             StartCoroutine(SetMapButtonActivity(false));
@@ -241,20 +244,20 @@ public class TutorialController : MonoBehaviour
     IEnumerator SetMapButtonActivity(bool isActive)
     {
         //set button active if true
-        if(isActive == true)
+        if (isActive == true)
         {
+            mapOpened();
+
             mapButtonParent.SetActive(true);
             mapExitButton.SetBool("Active", true);
             yield return new WaitForSeconds(.5f);
             mapPanelBGTransform.gameObject.SetActive(false);
-
-
         }
         int buttonIndex = 0;
 
         //create timer based on set delay time
         WaitForSeconds wait = new WaitForSeconds(mapButtonDelay);
-        
+
         //set each buttons animator activity
         foreach (GameObject mapButton in mapButtons)
         {
@@ -265,11 +268,11 @@ public class TutorialController : MonoBehaviour
             buttonIndex++;
 
         }
-        if(isActive== false)
+        if (isActive == false)
         {
             mapExitButton.SetBool("Active", false);
             yield return new WaitForSeconds(1f);
-            foreach(GameObject mapButton in mapButtons)
+            foreach (GameObject mapButton in mapButtons)
             {
                 mapButton.GetComponent<Button>().interactable = false;
             }
@@ -278,19 +281,21 @@ public class TutorialController : MonoBehaviour
     //Set Base tutorial activity
     public void SetTutorialActivity(bool isActive)
     {
-        if(isActive == true)
+        if (isActive == true)
         {
             baseParent.SetActive(true);
         }
         else
         {
-            
-        }
-        if(PlayerPrefs.GetString("Tutorial Completed") == "Completed")
-        {
-            InformationButton.instance.Click();
 
         }
+        if (PlayerPrefs.GetString(playerPrefsString) == "Completed")
+        {
+
+
+        }
+
+        InformationButton.instance.Click();
 
         tutorialMarkerIcon.ActivateMarkers();
         replayTutorialAnimator.SetBool("Active", isActive);
