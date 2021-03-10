@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-#if UNITY_Editor
+
 public class TutorialEditor : EditorWindow
 {
     string informationString;
@@ -18,10 +18,12 @@ public class TutorialEditor : EditorWindow
     TMP_Text titleText;
 
     [MenuItem("Tools/TutorialEditor")]
+#if UNITY_EDITOR
     public static void ShowWindow()
     {
         GetWindow(typeof(TutorialEditor));
     }
+#endif
     private void OnGUI()
     {
         GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
@@ -79,7 +81,7 @@ public class TutorialEditor : EditorWindow
     {
         tutorialObject.trianglePosition = triangleTransform.anchoredPosition;
         tutorialObject.triangleWidthAndHeight = triangleTransform.sizeDelta;
-        tutorialObject.triangleAnchorMin = panelTransform.anchorMin;
+        tutorialObject.triangleAnchorMin = triangleTransform.anchorMin;
         tutorialObject.triangleAnchorMax = triangleTransform.anchorMax;
         tutorialObject.trianglePivot = triangleTransform.pivot;
         tutorialObject.triangleRotation = triangleTransform.localEulerAngles;
@@ -106,4 +108,3 @@ public class TutorialEditor : EditorWindow
         tutorialObject.informationFontSize = informationText.fontSize;
     }
 }
-#endif
