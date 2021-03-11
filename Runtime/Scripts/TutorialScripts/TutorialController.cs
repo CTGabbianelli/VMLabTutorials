@@ -291,11 +291,10 @@ public class TutorialController : MonoBehaviour
         }
         if (PlayerPrefs.GetString(playerPrefsString) == "Completed")
         {
-
-
+            InformationButton.instance.Click();
         }
 
-        InformationButton.instance.Click();
+
 
         tutorialMarkerIcon.ActivateMarkers();
         replayTutorialAnimator.SetBool("Active", isActive);
