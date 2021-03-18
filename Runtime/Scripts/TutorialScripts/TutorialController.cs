@@ -90,11 +90,15 @@ public class TutorialController : MonoBehaviour
     }
     public void AddTutorials(int index)
     {
-        foreach (TutorialScriptableObjects o in tutorialSets[index].tutorialSets)
+        if(tutorialSets.Count > 0)
         {
-            baseTutorialPresets.Add(o);
+            foreach (TutorialScriptableObjects o in tutorialSets[index].tutorialSets)
+            {
+                baseTutorialPresets.Add(o);
+            }
+            tutorialMarkerIcon.Initialize(baseTutorialPresets.Count);
         }
-        tutorialMarkerIcon.Initialize(baseTutorialPresets.Count);
+
 
     }
 
@@ -166,11 +170,15 @@ public class TutorialController : MonoBehaviour
 
     public void StartTutorial()
     {
-        index = 0;
-        SetTutorial(baseTutorialPresets[index]);
-        tutorialMarkerIcon.SetMarkerColor(index);
-        SetTutorialActivity(true);
-        tutorialIndexChanged();
+        if(baseTutorialPresets.Count > 0)
+        {
+            index = 0;
+            SetTutorial(baseTutorialPresets[index]);
+            tutorialMarkerIcon.SetMarkerColor(index);
+            SetTutorialActivity(true);
+            tutorialIndexChanged();
+        }
+
     }
 
     //Decrement index and move tutorial back

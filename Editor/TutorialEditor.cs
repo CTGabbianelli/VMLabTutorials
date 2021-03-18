@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
+#if UNITY_EDITOR
 public class TutorialEditor : EditorWindow
 {
     string informationString;
@@ -18,12 +18,12 @@ public class TutorialEditor : EditorWindow
     TMP_Text titleText;
 
     [MenuItem("Tools/TutorialEditor")]
-#if UNITY_EDITOR
+
     public static void ShowWindow()
     {
         GetWindow(typeof(TutorialEditor));
     }
-#endif
+
     private void OnGUI()
     {
         GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
@@ -108,3 +108,4 @@ public class TutorialEditor : EditorWindow
         tutorialObject.informationFontSize = informationText.fontSize;
     }
 }
+#endif
