@@ -65,9 +65,9 @@ public class TutorialController : MonoBehaviour
         //set global reference
         instance = this;
     }
-    public void Initialize()
+    public void Initialize(int index)
     {
-        AddFirstTutorialSet();
+        AddTutorials(index);
 
         if (mapTutorials.Count != 0)
         {
@@ -84,10 +84,7 @@ public class TutorialController : MonoBehaviour
 
 
     }
-    void AddFirstTutorialSet()
-    {
-        AddTutorials(0);
-    }
+
     public void AddTutorials(int index)
     {
         if(tutorialSets.Count > 0)
