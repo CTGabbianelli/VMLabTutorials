@@ -131,6 +131,7 @@ public class TutorialController : MonoBehaviour
             tempMapDot = Instantiate(mapDotPrefab, mapButtonParent.transform);
 
             tempMapDot.GetComponent<RectTransform>().anchoredPosition = mapTutorial.mapButtonPosition;
+            tempMapDot.GetComponent<RectTransform>().sizeDelta = mapTutorial.mapButtonWidthAndHeight;
             tempMapDot.GetComponent<SimGuideReferenceHolder>().reference = mapTutorial;
             tempMapDot.GetComponent<SimGuideReferenceHolder>().tutorialPanel = mapPanelBGTransform.gameObject;
             tempMapDot.GetComponent<SimGuideReferenceHolder>().buttonTitle.text = mapTutorial.buttonTitle;
