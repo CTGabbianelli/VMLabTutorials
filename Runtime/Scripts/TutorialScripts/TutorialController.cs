@@ -65,9 +65,9 @@ public class TutorialController : MonoBehaviour
         //set global reference
         instance = this;
     }
-    public void Initialize(int index)
+    public void Initialize()
     {
-        AddTutorials(index);
+        CheckTutorialUrl();
 
         if (mapTutorials.Count != 0)
         {
@@ -83,6 +83,30 @@ public class TutorialController : MonoBehaviour
         }
 
 
+    }
+
+    void CheckTutorialUrl()
+    {
+        // Read any parameters included in URL
+        Dictionary<string, string> searchParameters = URLParameters.GetSearchParameters();
+        //https://some.domain.com/index.html?parameterName=parameterValue
+        if (searchParameters.ContainsKey("tutorialMode"))
+        {
+            string tutorialMode = searchParameters["tutorialMode"];
+            if (tutorialMode == "MainTutorial")
+            {
+                AddTutorials(0);
+            }
+            else if (tutorialMode == "AlternateTutorial")
+            {
+                AddTutorials(1);
+
+            }
+        }
+        else
+        {
+            AddTutorials(0);
+        }
     }
 
     public void AddTutorials(int index)
