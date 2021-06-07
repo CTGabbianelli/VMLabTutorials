@@ -98,11 +98,11 @@ public class TutorialController : MonoBehaviour
         if (searchParameters.ContainsKey("tutorialMode"))
         {
             string tutorialMode = searchParameters["tutorialMode"];
-            if (tutorialMode == "MainTutorial")
+            if (tutorialMode == "SequenceTutorial")
             {
                 AddTutorials(0);
             }
-            else if (tutorialMode == "AlternateTutorial")
+            else if (tutorialMode == "FullTutorial")
             {
                 AddTutorials(1);
 
@@ -179,6 +179,8 @@ public class TutorialController : MonoBehaviour
             {
                 print("not completed");
             }
+
+
         }
         tutorialIndexChanged();
 
@@ -213,6 +215,7 @@ public class TutorialController : MonoBehaviour
             SetTutorial(baseTutorialPresets[index]);
             tutorialMarkerIcon.SetMarkerColor(index);
             SetTutorialActivity(true);
+            InformationButton.instance.Click();
             tutorialIndexChanged();
         }
 
@@ -274,9 +277,10 @@ public class TutorialController : MonoBehaviour
             mapMaskAnimator.SetBool("Active", true);
             mapMaskTransform.sizeDelta = Vector2.zero;
             tutorialBG.SetActive(false);
-            StartCoroutine(SetMapButtonActivity(true));
+            StartCoroutine(SetMapButtonActivity(true)); 
+            InformationButton.instance.Click();
         }
-        InformationButton.instance.Click();
+
     }
     public void BringBackButtons()
     {
@@ -336,7 +340,7 @@ public class TutorialController : MonoBehaviour
         }
         if (PlayerPrefs.GetString(playerPrefsString) == "Completed")
         {
-            InformationButton.instance.Click();
+            //InformationButton.instance.Click();
         }
 
 
