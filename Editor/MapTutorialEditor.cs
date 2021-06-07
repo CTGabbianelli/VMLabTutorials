@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using TMPro;
 
-#if UNITY_Editor
+//#if UNITY_Editor
 public class MapTutorialEditor : EditorWindow
 {
     string informationString;
@@ -30,17 +30,50 @@ public class MapTutorialEditor : EditorWindow
     private void OnGUI()
     {
         GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
+
         tutorialMapObject = EditorGUILayout.ObjectField("Tutorial Scriptable Object", tutorialMapObject, typeof(TutorialMapScriptableObject), false) as TutorialMapScriptableObject;
-        tutorialMapButtonTransform = EditorGUILayout.ObjectField("Map Button Rect Transform", tutorialMapButtonTransform, typeof(RectTransform), true) as RectTransform;
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
         maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", maskTransform, typeof(RectTransform), true) as RectTransform;
+        if (GUILayout.Button("Save Mask Transform"))
+        {
+            SaveMaskTransform();
+        }
+        if (GUILayout.Button("Save Alternate Mask Transform"))
+        {
+            SaveAltMaskTransform();
+        }
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
         panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", panelTransform, typeof(RectTransform), true) as RectTransform;
         triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", triangleTransform, typeof(RectTransform), true) as RectTransform;
+        if (GUILayout.Button("Save Panel Transform"))
+        {
+            SavePanelTransforms();
+        }
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
         titleString = EditorGUILayout.TextField("Title", titleString);
         titleText = EditorGUILayout.ObjectField("Title Text", titleText, typeof(TMP_Text), true) as TMP_Text;
         informationString = EditorGUILayout.TextField("Information", informationString);
         informationText = EditorGUILayout.ObjectField("Information Text", informationText, typeof(TMP_Text), true) as TMP_Text;
+        if (GUILayout.Button("Save Text"))
+        {
+            SaveText();
+        }
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Map Button", EditorStyles.boldLabel);
+        tutorialMapButtonTransform = EditorGUILayout.ObjectField("Map Button Rect Transform", tutorialMapButtonTransform, typeof(RectTransform), true) as RectTransform;
         buttonTitleString = EditorGUILayout.TextField("Button Title", buttonTitleString);
         buttonTitleText = EditorGUILayout.ObjectField("Button Title Text", buttonTitleText, typeof(TMP_Text), true) as TMP_Text;
+        if (GUILayout.Button("Save Map Button"))
+        {
+            SaveMapButton();
+        }
 
 
         if (GUI.changed)
@@ -56,22 +89,49 @@ public class MapTutorialEditor : EditorWindow
             EditorUtility.SetDirty(panelTransform);
             EditorUtility.SetDirty(triangleTransform);
         }
-        if (GUILayout.Button("Save Tutorial Preset"))
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        if (GUILayout.Button("Save All"))
         {
             SaveTutorial();
         }
     }
     private void SaveTutorial()
     {
-        SetMaskRect();
-        SetPanelRect();
-        SetTitleText();
-        SetInformationText();
-        SetButtonTitle();
-        SetTriangle();
-        SetMapRect();
+        SaveMaskTransform();
+        SaveText();
+        SavePanelTransforms();
+        SaveMapButton();
+
+
+
+
+
     }
-    void SetMapRect()
+    private void SaveMaskTransform()
+    {
+        SetMaskRect();
+    }
+    private void SaveAltMaskTransform()
+    {
+        SetAltMaskRect();
+    }
+    public void SaveText()
+    {
+        SetTitleText(); 
+        SetInformationText();
+    }
+    public void SavePanelTransforms()
+    {
+        SetPanelRect();
+        SetTriangle();
+    }
+    public void SaveMapButton()
+    {
+        SetButtonTitle();
+        SetMapButtonRect();
+    }
+    void SetMapButtonRect()
     {
         tutorialMapObject.mapButtonPosition = tutorialMapButtonTransform.anchoredPosition;
         tutorialMapObject.mapButtonWidthAndHeight = tutorialMapButtonTransform.sizeDelta;
@@ -87,6 +147,15 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.maskAnchorMin = maskTransform.anchorMin;
         tutorialMapObject.maskAnchorMax = maskTransform.anchorMax;
         tutorialMapObject.maskPivot = maskTransform.pivot;
+    }
+    void SetAltMaskRect()
+    {
+        tutorialMapObject.usesAltMask = true;
+        tutorialMapObject.maskAltPosition = maskTransform.anchoredPosition;
+        tutorialMapObject.maskAltWidthAndHeight = maskTransform.sizeDelta;
+        tutorialMapObject.maskAltAnchorMin = maskTransform.anchorMin;
+        tutorialMapObject.maskAltAnchorMax = maskTransform.anchorMax;
+        tutorialMapObject.maskAltPivot = maskTransform.pivot;
     }
     void SetPanelRect()
     {
@@ -131,4 +200,4 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.buttonTitle = buttonTitleText.text;
     }
 }
-#endif
+//#endif

@@ -12,7 +12,12 @@ public class TutorialController : MonoBehaviour
     public delegate void MapOpened();
     public static event MapOpened mapOpened;
 
+    public delegate void MapButtonSelected();
+    public static event MapButtonSelected mapButtonSelected;
+
     public static TutorialController instance;
+
+    TutorialScriptableObjects currentTutorial;
 
     public string playerPrefsString;
 
@@ -102,6 +107,14 @@ public class TutorialController : MonoBehaviour
                 AddTutorials(1);
 
             }
+            else if (tutorialMode == "PICTutorial")
+            {
+                AddTutorials(2);
+            }
+            else
+            {
+                AddTutorials(0);
+            }
         }
         else
         {
@@ -111,7 +124,7 @@ public class TutorialController : MonoBehaviour
 
     public void AddTutorials(int index)
     {
-        if(tutorialSets.Count > 0)
+        if (tutorialSets.Count > 0)
         {
             foreach (TutorialScriptableObjects o in tutorialSets[index].tutorialSets)
             {
@@ -180,6 +193,8 @@ public class TutorialController : MonoBehaviour
     }
     public void SetMapTutorial(TutorialScriptableObjects tut)
     {
+        mapButtonSelected();
+        currentTutorial = tut;
         SetMapMask(tut);
         SetMapPanel(tut);
         SetMapArrow(tut);
@@ -192,7 +207,7 @@ public class TutorialController : MonoBehaviour
 
     public void StartTutorial()
     {
-        if(baseTutorialPresets.Count > 0)
+        if (baseTutorialPresets.Count > 0)
         {
             index = 0;
             SetTutorial(baseTutorialPresets[index]);
@@ -332,6 +347,7 @@ public class TutorialController : MonoBehaviour
 
     void SetTutorial(TutorialScriptableObjects tut)
     {
+        currentTutorial = tut;
         SetMask(tut);
         SetPanel(tut);
         SetArrow(tut);
@@ -353,6 +369,17 @@ public class TutorialController : MonoBehaviour
         baseParent.SetActive(false);
 
     }
+    public void SetActiveMask(bool useAltMask)
+    {
+        if(useAltMask == true)
+        {
+            SetAltMask(currentTutorial);
+        }
+        else
+        {
+            SetMask(currentTutorial);
+        }
+    }
     void SetMask(TutorialScriptableObjects tut)
     {
         maskTransform.anchoredPosition = tut.maskPosition;
@@ -360,6 +387,14 @@ public class TutorialController : MonoBehaviour
         maskTransform.anchorMin = tut.maskAnchorMin;
         maskTransform.anchorMax = tut.maskAnchorMax;
         maskTransform.pivot = tut.maskPivot;
+    }
+    void SetAltMask(TutorialScriptableObjects tut)
+    {
+        maskTransform.anchoredPosition = tut.maskAltPosition;
+        maskTransform.sizeDelta = tut.maskAltWidthAndHeight;
+        maskTransform.anchorMin = tut.maskAltAnchorMin;
+        maskTransform.anchorMax = tut.maskAltAnchorMax;
+        maskTransform.pivot = tut.maskAltPivot;
     }
     void SetPanel(TutorialScriptableObjects tut)
     {

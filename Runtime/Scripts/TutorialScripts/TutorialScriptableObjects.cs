@@ -12,6 +12,13 @@ public class TutorialScriptableObjects : ScriptableObject
     public Vector2 maskAnchorMin;
     public Vector2 maskAnchorMax;
     public Vector2 maskPivot;
+    [Header("Alternate Mask")]
+    public bool usesAltMask;
+    public Vector3 maskAltPosition;
+    public Vector2 maskAltWidthAndHeight;
+    public Vector2 maskAltAnchorMin;
+    public Vector2 maskAltAnchorMax;
+    public Vector2 maskAltPivot;
     [Header("Panel")]
     public Vector3 panelPosition;
     public Vector2 panelWidthAndHeight;

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-#if UNITY_EDITOR
+//#if UNITY_EDITOR
 public class TutorialEditor : EditorWindow
 {
     string informationString;
@@ -27,15 +27,40 @@ public class TutorialEditor : EditorWindow
     private void OnGUI()
     {
         GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
-        tutorialObject = EditorGUILayout.ObjectField("Tutorial Scriptable Object", tutorialObject, typeof(TutorialScriptableObjects), false) as TutorialScriptableObjects;
+
+        tutorialObject = EditorGUILayout.ObjectField("Tutorial Scriptable Object", tutorialObject, typeof(TutorialMapScriptableObject), false) as TutorialMapScriptableObject;
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
         maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", maskTransform, typeof(RectTransform), true) as RectTransform;
+        if (GUILayout.Button("Save Mask Transform"))
+        {
+            SaveMaskTransform();
+        }
+        if (GUILayout.Button("Save Alternate Mask Transform"))
+        {
+            SaveAltMaskTransform();
+        }
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
         panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", panelTransform, typeof(RectTransform), true) as RectTransform;
         triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", triangleTransform, typeof(RectTransform), true) as RectTransform;
+        if (GUILayout.Button("Save Panel Transform"))
+        {
+            SavePanelTransforms();
+        }
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
         titleString = EditorGUILayout.TextField("Title", titleString);
         titleText = EditorGUILayout.ObjectField("Title Text", titleText, typeof(TMP_Text), true) as TMP_Text;
         informationString = EditorGUILayout.TextField("Information", informationString);
         informationText = EditorGUILayout.ObjectField("Information Text", informationText, typeof(TMP_Text), true) as TMP_Text;
-
+        if (GUILayout.Button("Save Text"))
+        {
+            SaveText();
+        }
 
         if (GUI.changed)
         {
@@ -48,19 +73,38 @@ public class TutorialEditor : EditorWindow
             EditorUtility.SetDirty(panelTransform);
             EditorUtility.SetDirty(triangleTransform);
         }
-        if (GUILayout.Button("Save Tutorial Preset"))
+
+        GUILayout.Label("", EditorStyles.boldLabel);
+        if (GUILayout.Button("Save All"))
         {
             SaveTutorial();
         }
     }
     private void SaveTutorial()
     {
+        SaveMaskTransform();
+        SaveText();
+        SavePanelTransforms();
+    }
+    private void SaveMaskTransform()
+    {
         SetMaskRect();
-        SetPanelRect();
+    }
+    private void SaveAltMaskTransform()
+    {
+        SetAltMaskRect();
+    }
+    public void SaveText()
+    {
         SetTitleText();
         SetInformationText();
-        SetTringle();
     }
+    public void SavePanelTransforms()
+    {
+        SetPanelRect();
+        SetTriangle();
+    }
+
     void SetMaskRect()
     {
         tutorialObject.maskPosition = maskTransform.anchoredPosition;
@@ -68,6 +112,16 @@ public class TutorialEditor : EditorWindow
         tutorialObject.maskAnchorMin = maskTransform.anchorMin;
         tutorialObject.maskAnchorMax = maskTransform.anchorMax;
         tutorialObject.maskPivot = maskTransform.pivot;
+    }
+
+    void SetAltMaskRect()
+    {
+        tutorialObject.usesAltMask = true;
+        tutorialObject.maskAltPosition = maskTransform.anchoredPosition;
+        tutorialObject.maskAltWidthAndHeight = maskTransform.sizeDelta;
+        tutorialObject.maskAltAnchorMin = maskTransform.anchorMin;
+        tutorialObject.maskAltAnchorMax = maskTransform.anchorMax;
+        tutorialObject.maskAltPivot = maskTransform.pivot;
     }
     void SetPanelRect()
     {
@@ -77,7 +131,7 @@ public class TutorialEditor : EditorWindow
         tutorialObject.panelAnchorMax = panelTransform.anchorMax;
         tutorialObject.panelPivot = panelTransform.pivot;
     }
-    void SetTringle()
+    void SetTriangle()
     {
         tutorialObject.trianglePosition = triangleTransform.anchoredPosition;
         tutorialObject.triangleWidthAndHeight = triangleTransform.sizeDelta;
@@ -108,4 +162,4 @@ public class TutorialEditor : EditorWindow
         tutorialObject.informationFontSize = informationText.fontSize;
     }
 }
-#endif
+//#endif

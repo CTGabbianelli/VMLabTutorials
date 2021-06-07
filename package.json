@@ -1,11 +1,11 @@
 {
   "name": "com.vmlab.tutorialslibrary",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "displayName": "VMLab Tutorials",
   "description": "An updatable library of tutorials for VMLab projects.",
   "unity": "2019.4",
   "dependencies": {
-    "com.unity.textmeshpro": "2.1.4"
+    "com.unity.textmeshpro": "2.1.6"
   },
   "keywords": [
     "tutorial",
