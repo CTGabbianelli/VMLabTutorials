@@ -50,6 +50,10 @@ public class TutorialEditor : EditorWindow
         {
             SavePanelTransforms();
         }
+        if (GUILayout.Button("Save Alternate Panel Transform"))
+        {
+            SaveAltPanelTransforms();
+        }
 
         GUILayout.Label("", EditorStyles.boldLabel);
         GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
@@ -104,6 +108,11 @@ public class TutorialEditor : EditorWindow
         SetPanelRect();
         SetTriangle();
     }
+    public void SaveAltPanelTransforms()
+    {
+        SetAltPanelRect();
+        SetAltTriangle();
+    }
 
     void SetMaskRect()
     {
@@ -131,6 +140,14 @@ public class TutorialEditor : EditorWindow
         tutorialObject.panelAnchorMax = panelTransform.anchorMax;
         tutorialObject.panelPivot = panelTransform.pivot;
     }
+    void SetAltPanelRect()
+    {
+        tutorialObject.panelAltPosition = panelTransform.anchoredPosition;
+        tutorialObject.panelAltWidthAndHeight = panelTransform.sizeDelta;
+        tutorialObject.panelAltAnchorMin = panelTransform.anchorMin;
+        tutorialObject.panelAltAnchorMax = panelTransform.anchorMax;
+        tutorialObject.panelAltPivot = panelTransform.pivot;
+    }
     void SetTriangle()
     {
         tutorialObject.trianglePosition = triangleTransform.anchoredPosition;
@@ -139,6 +156,16 @@ public class TutorialEditor : EditorWindow
         tutorialObject.triangleAnchorMax = triangleTransform.anchorMax;
         tutorialObject.trianglePivot = triangleTransform.pivot;
         tutorialObject.triangleRotation = triangleTransform.localEulerAngles;
+
+    }
+    void SetAltTriangle()
+    {
+        tutorialObject.triangleAltPosition = triangleTransform.anchoredPosition;
+        tutorialObject.triangleAltWidthAndHeight = triangleTransform.sizeDelta;
+        tutorialObject.triangleAltAnchorMin = triangleTransform.anchorMin;
+        tutorialObject.triangleAltAnchorMax = triangleTransform.anchorMax;
+        tutorialObject.triangleAltPivot = triangleTransform.pivot;
+        tutorialObject.triangleAltRotation = triangleTransform.localEulerAngles;
 
     }
     void SetTitleText()

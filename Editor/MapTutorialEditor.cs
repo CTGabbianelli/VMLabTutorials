@@ -53,6 +53,10 @@ public class MapTutorialEditor : EditorWindow
         {
             SavePanelTransforms();
         }
+        if (GUILayout.Button("Save Alternate Panel Transform"))
+        {
+            SaveAltPanelTransforms();
+        }
 
         GUILayout.Label("", EditorStyles.boldLabel);
         GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
@@ -126,6 +130,11 @@ public class MapTutorialEditor : EditorWindow
         SetPanelRect();
         SetTriangle();
     }
+    public void SaveAltPanelTransforms()
+    {
+        SetAltPanelRect();
+        SetAltTriangle();
+    }
     public void SaveMapButton()
     {
         SetButtonTitle();
@@ -165,6 +174,14 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.panelAnchorMax = panelTransform.anchorMax;
         tutorialMapObject.panelPivot = panelTransform.pivot;
     }
+    void SetAltPanelRect()
+    {
+        tutorialMapObject.panelAltPosition = panelTransform.anchoredPosition;
+        tutorialMapObject.panelAltWidthAndHeight = panelTransform.sizeDelta;
+        tutorialMapObject.panelAltAnchorMin = panelTransform.anchorMin;
+        tutorialMapObject.panelAltAnchorMax = panelTransform.anchorMax;
+        tutorialMapObject.panelAltPivot = panelTransform.pivot;
+    }
     void SetTriangle()
     {
         tutorialMapObject.trianglePosition = triangleTransform.anchoredPosition;
@@ -173,6 +190,16 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.triangleAnchorMax = triangleTransform.anchorMax;
         tutorialMapObject.trianglePivot = triangleTransform.pivot;
         tutorialMapObject.triangleRotation = triangleTransform.localEulerAngles;
+
+    }
+    void SetAltTriangle()
+    {
+        tutorialMapObject.triangleAltPosition = triangleTransform.anchoredPosition;
+        tutorialMapObject.triangleAltWidthAndHeight = triangleTransform.sizeDelta;
+        tutorialMapObject.triangleAltAnchorMin = triangleTransform.anchorMin;
+        tutorialMapObject.triangleAltAnchorMax = triangleTransform.anchorMax;
+        tutorialMapObject.triangleAltPivot = triangleTransform.pivot;
+        tutorialMapObject.triangleAltRotation = triangleTransform.localEulerAngles;
 
     }
     void SetTitleText()

@@ -25,6 +25,12 @@ public class TutorialScriptableObjects : ScriptableObject
     public Vector2 panelAnchorMin;
     public Vector2 panelAnchorMax;
     public Vector2 panelPivot;
+    [Header("Alternate Panel")]
+    public Vector3 panelAltPosition;
+    public Vector2 panelAltWidthAndHeight;
+    public Vector2 panelAltAnchorMin;
+    public Vector2 panelAltAnchorMax;
+    public Vector2 panelAltPivot;
     [Header("Triangle")]
     public Vector3 trianglePosition;
     public Vector2 triangleWidthAndHeight;
@@ -32,6 +38,13 @@ public class TutorialScriptableObjects : ScriptableObject
     public Vector2 triangleAnchorMax;
     public Vector2 trianglePivot;
     public Vector3 triangleRotation;
+    [Header("Alternate Triangle")]
+    public Vector3 triangleAltPosition;
+    public Vector2 triangleAltWidthAndHeight;
+    public Vector2 triangleAltAnchorMin;
+    public Vector2 triangleAltAnchorMax;
+    public Vector2 triangleAltPivot;
+    public Vector3 triangleAltRotation;
     [Header("Title")]
     public Vector3 titleTextPosition;
     public Vector2 titleTextWidthAndHeight;

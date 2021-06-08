@@ -378,10 +378,14 @@ public class TutorialController : MonoBehaviour
         if(useAltMask == true)
         {
             SetAltMask(currentTutorial);
+            SetAltPanel(currentTutorial);
+            SetAltArrow(currentTutorial);
         }
         else
         {
             SetMask(currentTutorial);
+            SetPanel(currentTutorial);
+            SetArrow(currentTutorial);
         }
     }
     void SetMask(TutorialScriptableObjects tut)
@@ -408,7 +412,24 @@ public class TutorialController : MonoBehaviour
         panelBGTransform.anchorMax = tut.panelAnchorMax;
         panelBGTransform.pivot = tut.panelPivot;
     }
+    void SetAltPanel(TutorialScriptableObjects tut)
+    {
+        panelBGTransform.anchoredPosition = tut.panelPosition;
+        panelBGTransform.sizeDelta = tut.panelWidthAndHeight;
+        panelBGTransform.anchorMin = tut.panelAnchorMin;
+        panelBGTransform.anchorMax = tut.panelAnchorMax;
+        panelBGTransform.pivot = tut.panelPivot;
+    }
     void SetArrow(TutorialScriptableObjects tut)
+    {
+        arrowTransform.anchoredPosition = tut.trianglePosition;
+        arrowTransform.sizeDelta = tut.triangleWidthAndHeight;
+        arrowTransform.anchorMin = tut.triangleAnchorMin;
+        arrowTransform.anchorMax = tut.triangleAnchorMax;
+        arrowTransform.pivot = tut.trianglePivot;
+        arrowTransform.localEulerAngles = tut.triangleRotation;
+    }
+    void SetAltArrow(TutorialScriptableObjects tut)
     {
         arrowTransform.anchoredPosition = tut.trianglePosition;
         arrowTransform.sizeDelta = tut.triangleWidthAndHeight;
