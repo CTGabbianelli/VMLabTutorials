@@ -33,8 +33,9 @@ public class TutorialController : MonoBehaviour
     public List<TutorialObjectsList> tutorialSets;
     enum Tutorial
     {
-        Replay,
-        SimGuide
+        Sequence,
+        Map,
+        Inactive
     }
     Tutorial tutorial;
     [SerializeField]
@@ -158,12 +159,15 @@ public class TutorialController : MonoBehaviour
     //advance through tutorial sequence
     public void AdvanceToNextTutorial()
     {
+
         if (index < baseTutorialPresets.Count - 1)
         {
 
             index++;
             SetTutorial(baseTutorialPresets[index]);
             tutorialMarkerIcon.SetMarkerColor(index);
+            
+            tutorial = Tutorial.Sequence;
         }
         else
         {
@@ -180,7 +184,7 @@ public class TutorialController : MonoBehaviour
                 print("not completed");
             }
 
-
+            tutorial = Tutorial.Inactive;
         }
         tutorialIndexChanged();
 
@@ -258,6 +262,8 @@ public class TutorialController : MonoBehaviour
     //turn on tutorial map
     public void ActivateMap()
     {
+
+
         //enable map object and disable info panel object
         mapParent.SetActive(true);
 
@@ -292,9 +298,14 @@ public class TutorialController : MonoBehaviour
     //activate or deactive map buttons
     IEnumerator SetMapButtonActivity(bool isActive)
     {
+
+
+
         //set button active if true
         if (isActive == true)
         {
+            tutorial = Tutorial.Map;
+
             mapOpened();
 
             mapButtonParent.SetActive(true);
@@ -319,6 +330,7 @@ public class TutorialController : MonoBehaviour
         }
         if (isActive == false)
         {
+            tutorial = Tutorial.Inactive;
             mapExitButton.SetBool("Active", false);
             yield return new WaitForSeconds(1f);
             foreach (GameObject mapButton in mapButtons)
@@ -375,18 +387,37 @@ public class TutorialController : MonoBehaviour
     }
     public void SetActiveMask(bool useAltMask)
     {
-        if(useAltMask == true)
+        if(tutorial == Tutorial.Sequence)
         {
-            SetAltMask(currentTutorial);
-            SetAltPanel(currentTutorial);
-            SetAltArrow(currentTutorial);
+            if(useAltMask == true)
+            {
+                SetAltMask(currentTutorial);
+                SetAltPanel(currentTutorial);
+                SetAltArrow(currentTutorial);
+            }
+            else
+            {
+                SetMask(currentTutorial);
+                SetPanel(currentTutorial);
+                SetArrow(currentTutorial);
+            }
         }
-        else
+        else if(tutorial == Tutorial.Map)
         {
-            SetMask(currentTutorial);
-            SetPanel(currentTutorial);
-            SetArrow(currentTutorial);
+            if (useAltMask == true)
+            {
+                SetAltMapMask(currentTutorial);
+                SetAltMapPanel(currentTutorial);
+                SetAltMapArrow(currentTutorial);
+            }
+            else
+            {
+                SetMapMask(currentTutorial);
+                SetMapPanel(currentTutorial);
+                SetMapArrow(currentTutorial);
+            }
         }
+
     }
     void SetMask(TutorialScriptableObjects tut)
     {
@@ -398,6 +429,7 @@ public class TutorialController : MonoBehaviour
     }
     void SetAltMask(TutorialScriptableObjects tut)
     {
+        print("Alt");
         maskTransform.anchoredPosition = tut.maskAltPosition;
         maskTransform.sizeDelta = tut.maskAltWidthAndHeight;
         maskTransform.anchorMin = tut.maskAltAnchorMin;
@@ -470,6 +502,14 @@ public class TutorialController : MonoBehaviour
         mapMaskTransform.anchorMax = tut.maskAnchorMax;
         mapMaskTransform.pivot = tut.maskPivot;
     }
+    void SetAltMapMask(TutorialScriptableObjects tut)
+    {
+        mapMaskTransform.anchoredPosition = tut.maskAltPosition;
+        mapMaskTransform.sizeDelta = tut.maskAltWidthAndHeight;
+        mapMaskTransform.anchorMin = tut.maskAltAnchorMin;
+        mapMaskTransform.anchorMax = tut.maskAltAnchorMax;
+        mapMaskTransform.pivot = tut.maskAltPivot;
+    }
     void SetMapPanel(TutorialScriptableObjects tut)
     {
         mapPanelBGTransform.anchoredPosition = tut.panelPosition;
@@ -477,6 +517,14 @@ public class TutorialController : MonoBehaviour
         mapPanelBGTransform.anchorMin = tut.panelAnchorMin;
         mapPanelBGTransform.anchorMax = tut.panelAnchorMax;
         mapPanelBGTransform.pivot = tut.panelPivot;
+    }
+    void SetAltMapPanel(TutorialScriptableObjects tut)
+    {
+        mapPanelBGTransform.anchoredPosition = tut.panelAltPosition;
+        mapPanelBGTransform.sizeDelta = tut.panelAltWidthAndHeight;
+        mapPanelBGTransform.anchorMin = tut.panelAltAnchorMin;
+        mapPanelBGTransform.anchorMax = tut.panelAltAnchorMax;
+        mapPanelBGTransform.pivot = tut.panelAltPivot;
     }
     void SetMapArrow(TutorialScriptableObjects tut)
     {
@@ -486,6 +534,15 @@ public class TutorialController : MonoBehaviour
         mapArrowTransform.anchorMax = tut.triangleAnchorMax;
         mapArrowTransform.pivot = tut.trianglePivot;
         mapArrowTransform.localEulerAngles = tut.triangleRotation;
+    }
+    void SetAltMapArrow(TutorialScriptableObjects tut)
+    {
+        mapArrowTransform.anchoredPosition = tut.triangleAltPosition;
+        mapArrowTransform.sizeDelta = tut.triangleAltWidthAndHeight;
+        mapArrowTransform.anchorMin = tut.triangleAltAnchorMin;
+        mapArrowTransform.anchorMax = tut.triangleAltAnchorMax;
+        mapArrowTransform.pivot = tut.triangleAltPivot;
+        mapArrowTransform.localEulerAngles = tut.triangleAltRotation;
     }
     void SetMapTitle(TutorialScriptableObjects tut)
     {
