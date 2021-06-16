@@ -96,12 +96,17 @@ public class MapTutorialEditor : EditorWindow
                 EditorUtility.SetDirty(informationText);
                 titleText.text = titleString;
                 EditorUtility.SetDirty(titleText);
-                buttonTitleText.text = buttonTitleString;
-                EditorUtility.SetDirty(buttonTitleText);
                 EditorUtility.SetDirty(tutorialMapObject);
                 EditorUtility.SetDirty(maskTransform);
                 EditorUtility.SetDirty(panelTransform);
                 EditorUtility.SetDirty(triangleTransform);
+
+                if(buttonTitleText!=null && tutorialMapButtonTransform != null)
+                {
+                    buttonTitleText.text = buttonTitleString;
+                    EditorUtility.SetDirty(buttonTitleText);
+                    EditorUtility.SetDirty(tutorialMapButtonTransform);
+                }
             }
 
             GUILayout.Label("", EditorStyles.boldLabel);
@@ -131,40 +136,47 @@ public class MapTutorialEditor : EditorWindow
         SetTriangle();
         SetButtonTitle();
         SetMapButtonRect();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     private void SaveMaskTransform()
     {
         Undo.RecordObject(tutorialMapObject,"Set Mask");
         SetMaskRect();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     private void SaveAltMaskTransform()
     {
         Undo.RecordObject(tutorialMapObject, "Set Alternate Mask");
         SetAltMaskRect();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     public void SaveText()
     {
         Undo.RecordObject(tutorialMapObject, "Set Text");
         SetTitleText(); 
         SetInformationText();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     public void SavePanelTransforms()
     {
         Undo.RecordObject(tutorialMapObject, "Set Panel");
         SetPanelRect();
         SetTriangle();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     public void SaveAltPanelTransforms()
     {
         Undo.RecordObject(tutorialMapObject, "Set Alternate Panel");
         SetAltPanelRect();
         SetAltTriangle();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     public void SaveMapButton()
     {
         Undo.RecordObject(tutorialMapObject, "Set Map Button");
         SetButtonTitle();
         SetMapButtonRect();
+        EditorUtility.SetDirty(tutorialMapObject);
     }
     void SetMapButtonRect()
     {

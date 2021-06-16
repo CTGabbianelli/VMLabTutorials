@@ -109,34 +109,41 @@ public class TutorialEditor : EditorWindow
         SetInformationText();
         SetPanelRect();
         SetTriangle();
+        EditorUtility.SetDirty(tutorialObject);
     }
     private void SaveMaskTransform()
     {
         Undo.RecordObject(tutorialObject, "Set Mask");
         SetMaskRect();
+        EditorUtility.SetDirty(tutorialObject);
+
     }
     private void SaveAltMaskTransform()
     {
         Undo.RecordObject(tutorialObject, "Set Alternate Mask");
         SetAltMaskRect();
+        EditorUtility.SetDirty(tutorialObject);
     }
     public void SaveText()
     {
         Undo.RecordObject(tutorialObject, "Set Text");
         SetTitleText();
         SetInformationText();
+        EditorUtility.SetDirty(tutorialObject);
     }
     public void SavePanelTransforms()
     {
         Undo.RecordObject(tutorialObject, "Set Panel");
         SetPanelRect();
         SetTriangle();
+        EditorUtility.SetDirty(tutorialObject);
     }
     public void SaveAltPanelTransforms()
     {
         Undo.RecordObject(tutorialObject, "Set Alternate Panel");
         SetAltPanelRect();
         SetAltTriangle();
+        EditorUtility.SetDirty(tutorialObject);
     }
 
     void SetMaskRect()
