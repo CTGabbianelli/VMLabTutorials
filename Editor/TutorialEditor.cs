@@ -9,6 +9,7 @@ public class TutorialEditor : EditorWindow
 {
     string informationString;
     string titleString;
+    TutorialController tutorialController;
     TutorialScriptableObjects tutorialObject;
     RectTransform maskTransform;
     RectTransform panelTransform;
@@ -28,6 +29,8 @@ public class TutorialEditor : EditorWindow
 
     private void OnGUI()
     {
+        tutorialController = GameObject.FindObjectOfType<TutorialController>();
+
         if (GameObject.FindObjectOfType<TutorialController>())
         {
             GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
@@ -36,7 +39,7 @@ public class TutorialEditor : EditorWindow
 
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
-            maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", maskTransform, typeof(RectTransform), true) as RectTransform;
+            maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.maskTransform, typeof(RectTransform), true) as RectTransform;
             if (GUILayout.Button("Save Mask Transform"))
             {
                 SaveMaskTransform();
@@ -48,8 +51,8 @@ public class TutorialEditor : EditorWindow
 
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
-            panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", panelTransform, typeof(RectTransform), true) as RectTransform;
-            triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", triangleTransform, typeof(RectTransform), true) as RectTransform;
+            panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", tutorialController.panelBGTransform, typeof(RectTransform), true) as RectTransform;
+            triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", tutorialController.arrowTransform, typeof(RectTransform), true) as RectTransform;
             if (GUILayout.Button("Save Panel Transform"))
             {
                 SavePanelTransforms();
@@ -62,9 +65,9 @@ public class TutorialEditor : EditorWindow
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
             titleString = EditorGUILayout.TextField("Title", titleString);
-            titleText = EditorGUILayout.ObjectField("Title Text", titleText, typeof(TMP_Text), true) as TMP_Text;
+            titleText = EditorGUILayout.ObjectField("Title Text", tutorialController.titleText, typeof(TMP_Text), true) as TMP_Text;
             informationString = EditorGUILayout.TextField("Information", informationString);
-            informationText = EditorGUILayout.ObjectField("Information Text", informationText, typeof(TMP_Text), true) as TMP_Text;
+            informationText = EditorGUILayout.ObjectField("Information Text", tutorialController.informationText, typeof(TMP_Text), true) as TMP_Text;
             if (GUILayout.Button("Save Text"))
             {
                 SaveText();
@@ -94,115 +97,79 @@ public class TutorialEditor : EditorWindow
             if (GUILayout.Button("Add Tutorial System to Scene"))
             {
                 GameObject tutPrefab = PrefabUtility.LoadPrefabContents("Packages/com.vmlab.tutorialslibrary/Runtime/Prefabs/TitleAndTutorialCanvas.prefab") as GameObject;
-                Debug.LogError(SceneManager.GetActiveScene().name);
                 Instantiate(tutPrefab);
-
             }
         }
     }
     private void SaveTutorial()
     {
+        Undo.RecordObject(tutorialObject, "Set All");
         SaveMaskTransform();
-        SaveText();
-        SavePanelTransforms();
+        SetTitleText();
+        SetInformationText();
+        SetPanelRect();
+        SetTriangle();
     }
     private void SaveMaskTransform()
     {
+        Undo.RecordObject(tutorialObject, "Set Mask");
         SetMaskRect();
     }
     private void SaveAltMaskTransform()
     {
+        Undo.RecordObject(tutorialObject, "Set Alternate Mask");
         SetAltMaskRect();
     }
     public void SaveText()
     {
+        Undo.RecordObject(tutorialObject, "Set Text");
         SetTitleText();
         SetInformationText();
     }
     public void SavePanelTransforms()
     {
+        Undo.RecordObject(tutorialObject, "Set Panel");
         SetPanelRect();
         SetTriangle();
     }
     public void SaveAltPanelTransforms()
     {
+        Undo.RecordObject(tutorialObject, "Set Alternate Panel");
         SetAltPanelRect();
         SetAltTriangle();
     }
 
     void SetMaskRect()
     {
-        tutorialObject.maskPosition = maskTransform.anchoredPosition;
-        tutorialObject.maskWidthAndHeight = maskTransform.sizeDelta;
-        tutorialObject.maskAnchorMin = maskTransform.anchorMin;
-        tutorialObject.maskAnchorMax = maskTransform.anchorMax;
-        tutorialObject.maskPivot = maskTransform.pivot;
+        tutorialObject.SetMask(maskTransform);
     }
-
     void SetAltMaskRect()
     {
-        tutorialObject.usesAltMask = true;
-        tutorialObject.maskAltPosition = maskTransform.anchoredPosition;
-        tutorialObject.maskAltWidthAndHeight = maskTransform.sizeDelta;
-        tutorialObject.maskAltAnchorMin = maskTransform.anchorMin;
-        tutorialObject.maskAltAnchorMax = maskTransform.anchorMax;
-        tutorialObject.maskAltPivot = maskTransform.pivot;
+        tutorialObject.SetAlternateMask(maskTransform);
     }
     void SetPanelRect()
     {
-        tutorialObject.panelPosition = panelTransform.anchoredPosition;
-        tutorialObject.panelWidthAndHeight = panelTransform.sizeDelta;
-        tutorialObject.panelAnchorMin = panelTransform.anchorMin;
-        tutorialObject.panelAnchorMax = panelTransform.anchorMax;
-        tutorialObject.panelPivot = panelTransform.pivot;
+        tutorialObject.SetPanelTransform(panelTransform);
     }
     void SetAltPanelRect()
     {
-        tutorialObject.panelAltPosition = panelTransform.anchoredPosition;
-        tutorialObject.panelAltWidthAndHeight = panelTransform.sizeDelta;
-        tutorialObject.panelAltAnchorMin = panelTransform.anchorMin;
-        tutorialObject.panelAltAnchorMax = panelTransform.anchorMax;
-        tutorialObject.panelAltPivot = panelTransform.pivot;
+        tutorialObject.SetAlternatePanelTransform(panelTransform);
     }
     void SetTriangle()
     {
-        tutorialObject.trianglePosition = triangleTransform.anchoredPosition;
-        tutorialObject.triangleWidthAndHeight = triangleTransform.sizeDelta;
-        tutorialObject.triangleAnchorMin = triangleTransform.anchorMin;
-        tutorialObject.triangleAnchorMax = triangleTransform.anchorMax;
-        tutorialObject.trianglePivot = triangleTransform.pivot;
-        tutorialObject.triangleRotation = triangleTransform.localEulerAngles;
-
+        tutorialObject.SetTriangleTransform(triangleTransform);
     }
     void SetAltTriangle()
     {
-        tutorialObject.triangleAltPosition = triangleTransform.anchoredPosition;
-        tutorialObject.triangleAltWidthAndHeight = triangleTransform.sizeDelta;
-        tutorialObject.triangleAltAnchorMin = triangleTransform.anchorMin;
-        tutorialObject.triangleAltAnchorMax = triangleTransform.anchorMax;
-        tutorialObject.triangleAltPivot = triangleTransform.pivot;
-        tutorialObject.triangleAltRotation = triangleTransform.localEulerAngles;
-
+        tutorialObject.SetAlternateTriangleTransform(triangleTransform);
     }
     void SetTitleText()
     {
-        tutorialObject.titleTextPosition = titleText.rectTransform.anchoredPosition;
-        tutorialObject.titleTextWidthAndHeight = titleText.rectTransform.sizeDelta;
-        tutorialObject.titleTextAnchorMin = titleText.rectTransform.anchorMin;
-        tutorialObject.titleTextAnchorMax = titleText.rectTransform.anchorMax;
-        tutorialObject.titleTextPivot = titleText.rectTransform.pivot;
-        tutorialObject.titleText = titleText.text;
-        tutorialObject.titleFontSize = titleText.fontSize;
+        tutorialObject.SetTitleText(titleText);
     }
     void SetInformationText()
     {
-        tutorialObject.informationTextPosition = informationText.rectTransform.anchoredPosition;
-        tutorialObject.informationTextWidthAndHeight = informationText.rectTransform.sizeDelta;
-        tutorialObject.informationTextAnchorMin = informationText.rectTransform.anchorMin;
-        tutorialObject.informationTextAnchorMax = informationText.rectTransform.anchorMax;
-        tutorialObject.informationTextPivot = informationText.rectTransform.pivot;
-        tutorialObject.informationText = informationText.text;
-        tutorialObject.informationFontSize = informationText.fontSize;
+        tutorialObject.SetInformationText(informationText);
     }
 }
 //#endif

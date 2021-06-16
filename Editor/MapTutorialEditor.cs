@@ -6,11 +6,14 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 //#if UNITY_Editor
+[System.Serializable]
 public class MapTutorialEditor : EditorWindow
 {
     string informationString;
     string titleString;
     string buttonTitleString;
+    [SerializeField]
+    TutorialController tutorialController;
     TutorialMapScriptableObject tutorialMapObject;
     RectTransform tutorialMapButtonTransform;
     RectTransform maskTransform;
@@ -27,11 +30,11 @@ public class MapTutorialEditor : EditorWindow
     public static void ShowMapWindow()
     {
         GetWindow(typeof(MapTutorialEditor));
-
-
     }
     private void OnGUI()
     {
+        tutorialController = GameObject.FindObjectOfType<TutorialController>();
+
         if (GameObject.FindObjectOfType<TutorialController>())
         {
             GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
@@ -40,9 +43,11 @@ public class MapTutorialEditor : EditorWindow
 
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
-            maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", maskTransform, typeof(RectTransform), true) as RectTransform;
+            maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.mapMaskTransform, typeof(RectTransform), true) as RectTransform;
+
             if (GUILayout.Button("Save Mask Transform"))
             {
+                Undo.RecordObject(this, "Mask Changed");
                 SaveMaskTransform();
             }
             if (GUILayout.Button("Save Alternate Mask Transform"))
@@ -52,8 +57,8 @@ public class MapTutorialEditor : EditorWindow
 
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
-            panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", panelTransform, typeof(RectTransform), true) as RectTransform;
-            triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", triangleTransform, typeof(RectTransform), true) as RectTransform;
+            panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", tutorialController.mapPanelBGTransform, typeof(RectTransform), true) as RectTransform;
+            triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", tutorialController.mapArrowTransform, typeof(RectTransform), true) as RectTransform;
             if (GUILayout.Button("Save Panel Transform"))
             {
                 SavePanelTransforms();
@@ -66,9 +71,9 @@ public class MapTutorialEditor : EditorWindow
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
             titleString = EditorGUILayout.TextField("Title", titleString);
-            titleText = EditorGUILayout.ObjectField("Title Text", titleText, typeof(TMP_Text), true) as TMP_Text;
+            titleText = EditorGUILayout.ObjectField("Title Text", tutorialController.mapTitleText, typeof(TMP_Text), true) as TMP_Text;
             informationString = EditorGUILayout.TextField("Information", informationString);
-            informationText = EditorGUILayout.ObjectField("Information Text", informationText, typeof(TMP_Text), true) as TMP_Text;
+            informationText = EditorGUILayout.ObjectField("Information Text", tutorialController.mapInformationText, typeof(TMP_Text), true) as TMP_Text;
             if (GUILayout.Button("Save Text"))
             {
                 SaveText();
@@ -111,138 +116,96 @@ public class MapTutorialEditor : EditorWindow
             if (GUILayout.Button("Add Tutorial System to Scene"))
             {
                 GameObject tutPrefab = PrefabUtility.LoadPrefabContents("Packages/com.vmlab.tutorialslibrary/Runtime/Prefabs/TitleAndTutorialCanvas.prefab") as GameObject;
-                Debug.LogError(SceneManager.GetActiveScene().name);
                 Instantiate(tutPrefab);
-
             }
         }
 
     }
     private void SaveTutorial()
     {
+        Undo.RecordObject(tutorialMapObject, "Set All");
         SaveMaskTransform();
-        SaveText();
-        SavePanelTransforms();
-        SaveMapButton();
-
-
-
-
-
+        SetTitleText();
+        SetInformationText();
+        SetPanelRect();
+        SetTriangle();
+        SetButtonTitle();
+        SetMapButtonRect();
     }
     private void SaveMaskTransform()
     {
+        Undo.RecordObject(tutorialMapObject,"Set Mask");
         SetMaskRect();
     }
     private void SaveAltMaskTransform()
     {
+        Undo.RecordObject(tutorialMapObject, "Set Alternate Mask");
         SetAltMaskRect();
     }
     public void SaveText()
     {
+        Undo.RecordObject(tutorialMapObject, "Set Text");
         SetTitleText(); 
         SetInformationText();
     }
     public void SavePanelTransforms()
     {
+        Undo.RecordObject(tutorialMapObject, "Set Panel");
         SetPanelRect();
         SetTriangle();
     }
     public void SaveAltPanelTransforms()
     {
+        Undo.RecordObject(tutorialMapObject, "Set Alternate Panel");
         SetAltPanelRect();
         SetAltTriangle();
     }
     public void SaveMapButton()
     {
+        Undo.RecordObject(tutorialMapObject, "Set Map Button");
         SetButtonTitle();
         SetMapButtonRect();
     }
     void SetMapButtonRect()
     {
-        tutorialMapObject.mapButtonPosition = tutorialMapButtonTransform.anchoredPosition;
-        tutorialMapObject.mapButtonWidthAndHeight = tutorialMapButtonTransform.sizeDelta;
-        tutorialMapObject.mapButtonAnchorMin = tutorialMapButtonTransform.anchorMin;
-        tutorialMapObject.mapButtonAnchorMax = tutorialMapButtonTransform.anchorMax;
-        tutorialMapObject.mapButtonPivot = tutorialMapButtonTransform.pivot;
+        tutorialMapObject.SetMapButton(tutorialMapButtonTransform);
     }
 
     void SetMaskRect()
     {
-        tutorialMapObject.maskPosition = maskTransform.anchoredPosition;
-        tutorialMapObject.maskWidthAndHeight = maskTransform.sizeDelta;
-        tutorialMapObject.maskAnchorMin = maskTransform.anchorMin;
-        tutorialMapObject.maskAnchorMax = maskTransform.anchorMax;
-        tutorialMapObject.maskPivot = maskTransform.pivot;
+        tutorialMapObject.SetMask(maskTransform);
     }
     void SetAltMaskRect()
     {
-        tutorialMapObject.usesAltMask = true;
-        tutorialMapObject.maskAltPosition = maskTransform.anchoredPosition;
-        tutorialMapObject.maskAltWidthAndHeight = maskTransform.sizeDelta;
-        tutorialMapObject.maskAltAnchorMin = maskTransform.anchorMin;
-        tutorialMapObject.maskAltAnchorMax = maskTransform.anchorMax;
-        tutorialMapObject.maskAltPivot = maskTransform.pivot;
+        tutorialMapObject.SetAlternateMask(maskTransform);
     }
     void SetPanelRect()
     {
-        tutorialMapObject.panelPosition = panelTransform.anchoredPosition;
-        tutorialMapObject.panelWidthAndHeight = panelTransform.sizeDelta;
-        tutorialMapObject.panelAnchorMin = panelTransform.anchorMin;
-        tutorialMapObject.panelAnchorMax = panelTransform.anchorMax;
-        tutorialMapObject.panelPivot = panelTransform.pivot;
+        tutorialMapObject.SetPanelTransform(panelTransform);
     }
     void SetAltPanelRect()
     {
-        tutorialMapObject.panelAltPosition = panelTransform.anchoredPosition;
-        tutorialMapObject.panelAltWidthAndHeight = panelTransform.sizeDelta;
-        tutorialMapObject.panelAltAnchorMin = panelTransform.anchorMin;
-        tutorialMapObject.panelAltAnchorMax = panelTransform.anchorMax;
-        tutorialMapObject.panelAltPivot = panelTransform.pivot;
+        tutorialMapObject.SetAlternatePanelTransform(panelTransform);
     }
     void SetTriangle()
     {
-        tutorialMapObject.trianglePosition = triangleTransform.anchoredPosition;
-        tutorialMapObject.triangleWidthAndHeight = triangleTransform.sizeDelta;
-        tutorialMapObject.triangleAnchorMin = panelTransform.anchorMin;
-        tutorialMapObject.triangleAnchorMax = triangleTransform.anchorMax;
-        tutorialMapObject.trianglePivot = triangleTransform.pivot;
-        tutorialMapObject.triangleRotation = triangleTransform.localEulerAngles;
-
+        tutorialMapObject.SetTriangleTransform(triangleTransform);
     }
     void SetAltTriangle()
     {
-        tutorialMapObject.triangleAltPosition = triangleTransform.anchoredPosition;
-        tutorialMapObject.triangleAltWidthAndHeight = triangleTransform.sizeDelta;
-        tutorialMapObject.triangleAltAnchorMin = triangleTransform.anchorMin;
-        tutorialMapObject.triangleAltAnchorMax = triangleTransform.anchorMax;
-        tutorialMapObject.triangleAltPivot = triangleTransform.pivot;
-        tutorialMapObject.triangleAltRotation = triangleTransform.localEulerAngles;
-
+        tutorialMapObject.SetAlternateTriangleTransform(triangleTransform);
     }
     void SetTitleText()
     {
-        tutorialMapObject.titleTextPosition = titleText.rectTransform.anchoredPosition;
-        tutorialMapObject.titleTextWidthAndHeight = titleText.rectTransform.sizeDelta;
-        tutorialMapObject.titleTextAnchorMin = titleText.rectTransform.anchorMin;
-        tutorialMapObject.titleTextAnchorMax = titleText.rectTransform.anchorMax;
-        tutorialMapObject.titleTextPivot = titleText.rectTransform.pivot;
-        tutorialMapObject.titleText = titleText.text;
-        tutorialMapObject.titleFontSize = titleText.fontSize;
+        tutorialMapObject.SetTitleText(titleText);
     }
     void SetInformationText()
     {
-        tutorialMapObject.informationTextPosition = informationText.rectTransform.anchoredPosition;
-        tutorialMapObject.informationTextWidthAndHeight = informationText.rectTransform.sizeDelta;
-        tutorialMapObject.informationTextAnchorMin = informationText.rectTransform.anchorMin;
-        tutorialMapObject.informationTextAnchorMax = informationText.rectTransform.anchorMax;
-        tutorialMapObject.informationTextPivot = informationText.rectTransform.pivot;
-        tutorialMapObject.informationText = informationText.text;
-        tutorialMapObject.informationFontSize = informationText.fontSize;
+        tutorialMapObject.SetInformationText(informationText);
     }
     void SetButtonTitle()
     {
-        tutorialMapObject.buttonTitle = buttonTitleText.text;
+        tutorialMapObject.SetMapTitle(buttonTitleText.text);
     }
 }
 //#endif
