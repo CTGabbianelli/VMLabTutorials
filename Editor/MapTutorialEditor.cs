@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 //#if UNITY_Editor
 public class MapTutorialEditor : EditorWindow
@@ -26,79 +27,96 @@ public class MapTutorialEditor : EditorWindow
     public static void ShowMapWindow()
     {
         GetWindow(typeof(MapTutorialEditor));
+
+
     }
     private void OnGUI()
     {
-        GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
-
-        tutorialMapObject = EditorGUILayout.ObjectField("Tutorial Scriptable Object", tutorialMapObject, typeof(TutorialMapScriptableObject), false) as TutorialMapScriptableObject;
-
-        GUILayout.Label("", EditorStyles.boldLabel);
-        GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
-        maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", maskTransform, typeof(RectTransform), true) as RectTransform;
-        if (GUILayout.Button("Save Mask Transform"))
+        if (GameObject.FindObjectOfType<TutorialController>())
         {
-            SaveMaskTransform();
+            GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
+
+            tutorialMapObject = EditorGUILayout.ObjectField("Tutorial Scriptable Object", tutorialMapObject, typeof(TutorialMapScriptableObject), false) as TutorialMapScriptableObject;
+
+            GUILayout.Label("", EditorStyles.boldLabel);
+            GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
+            maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", maskTransform, typeof(RectTransform), true) as RectTransform;
+            if (GUILayout.Button("Save Mask Transform"))
+            {
+                SaveMaskTransform();
+            }
+            if (GUILayout.Button("Save Alternate Mask Transform"))
+            {
+                SaveAltMaskTransform();
+            }
+
+            GUILayout.Label("", EditorStyles.boldLabel);
+            GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
+            panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", panelTransform, typeof(RectTransform), true) as RectTransform;
+            triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", triangleTransform, typeof(RectTransform), true) as RectTransform;
+            if (GUILayout.Button("Save Panel Transform"))
+            {
+                SavePanelTransforms();
+            }
+            if (GUILayout.Button("Save Alternate Panel Transform"))
+            {
+                SaveAltPanelTransforms();
+            }
+
+            GUILayout.Label("", EditorStyles.boldLabel);
+            GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
+            titleString = EditorGUILayout.TextField("Title", titleString);
+            titleText = EditorGUILayout.ObjectField("Title Text", titleText, typeof(TMP_Text), true) as TMP_Text;
+            informationString = EditorGUILayout.TextField("Information", informationString);
+            informationText = EditorGUILayout.ObjectField("Information Text", informationText, typeof(TMP_Text), true) as TMP_Text;
+            if (GUILayout.Button("Save Text"))
+            {
+                SaveText();
+            }
+
+            GUILayout.Label("", EditorStyles.boldLabel);
+            GUILayout.Label("Save Map Button", EditorStyles.boldLabel);
+            tutorialMapButtonTransform = EditorGUILayout.ObjectField("Map Button Rect Transform", tutorialMapButtonTransform, typeof(RectTransform), true) as RectTransform;
+            buttonTitleString = EditorGUILayout.TextField("Button Title", buttonTitleString);
+            buttonTitleText = EditorGUILayout.ObjectField("Button Title Text", buttonTitleText, typeof(TMP_Text), true) as TMP_Text;
+            if (GUILayout.Button("Save Map Button"))
+            {
+                SaveMapButton();
+            }
+
+
+            if (GUI.changed)
+            {
+                informationText.text = informationString;
+                EditorUtility.SetDirty(informationText);
+                titleText.text = titleString;
+                EditorUtility.SetDirty(titleText);
+                buttonTitleText.text = buttonTitleString;
+                EditorUtility.SetDirty(buttonTitleText);
+                EditorUtility.SetDirty(tutorialMapObject);
+                EditorUtility.SetDirty(maskTransform);
+                EditorUtility.SetDirty(panelTransform);
+                EditorUtility.SetDirty(triangleTransform);
+            }
+
+            GUILayout.Label("", EditorStyles.boldLabel);
+            if (GUILayout.Button("Save All"))
+            {
+                SaveTutorial();
+            }
         }
-        if (GUILayout.Button("Save Alternate Mask Transform"))
+        else
         {
-            SaveAltMaskTransform();
+            GUILayout.Label("There is currently no tutorial system in the scene", EditorStyles.boldLabel);
+            if (GUILayout.Button("Add Tutorial System to Scene"))
+            {
+                GameObject tutPrefab = PrefabUtility.LoadPrefabContents("Packages/com.vmlab.tutorialslibrary/Runtime/Prefabs/TitleAndTutorialCanvas.prefab") as GameObject;
+                Debug.LogError(SceneManager.GetActiveScene().name);
+                Instantiate(tutPrefab);
+
+            }
         }
 
-        GUILayout.Label("", EditorStyles.boldLabel);
-        GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
-        panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", panelTransform, typeof(RectTransform), true) as RectTransform;
-        triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", triangleTransform, typeof(RectTransform), true) as RectTransform;
-        if (GUILayout.Button("Save Panel Transform"))
-        {
-            SavePanelTransforms();
-        }
-        if (GUILayout.Button("Save Alternate Panel Transform"))
-        {
-            SaveAltPanelTransforms();
-        }
-
-        GUILayout.Label("", EditorStyles.boldLabel);
-        GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
-        titleString = EditorGUILayout.TextField("Title", titleString);
-        titleText = EditorGUILayout.ObjectField("Title Text", titleText, typeof(TMP_Text), true) as TMP_Text;
-        informationString = EditorGUILayout.TextField("Information", informationString);
-        informationText = EditorGUILayout.ObjectField("Information Text", informationText, typeof(TMP_Text), true) as TMP_Text;
-        if (GUILayout.Button("Save Text"))
-        {
-            SaveText();
-        }
-
-        GUILayout.Label("", EditorStyles.boldLabel);
-        GUILayout.Label("Save Map Button", EditorStyles.boldLabel);
-        tutorialMapButtonTransform = EditorGUILayout.ObjectField("Map Button Rect Transform", tutorialMapButtonTransform, typeof(RectTransform), true) as RectTransform;
-        buttonTitleString = EditorGUILayout.TextField("Button Title", buttonTitleString);
-        buttonTitleText = EditorGUILayout.ObjectField("Button Title Text", buttonTitleText, typeof(TMP_Text), true) as TMP_Text;
-        if (GUILayout.Button("Save Map Button"))
-        {
-            SaveMapButton();
-        }
-
-
-        if (GUI.changed)
-        {
-            informationText.text = informationString;
-            EditorUtility.SetDirty(informationText);
-            titleText.text = titleString;
-            EditorUtility.SetDirty(titleText);
-            buttonTitleText.text = buttonTitleString;
-            EditorUtility.SetDirty(buttonTitleText);
-            EditorUtility.SetDirty(tutorialMapObject);
-            EditorUtility.SetDirty(maskTransform);
-            EditorUtility.SetDirty(panelTransform);
-            EditorUtility.SetDirty(triangleTransform);
-        }
-
-        GUILayout.Label("", EditorStyles.boldLabel);
-        if (GUILayout.Button("Save All"))
-        {
-            SaveTutorial();
-        }
     }
     private void SaveTutorial()
     {
