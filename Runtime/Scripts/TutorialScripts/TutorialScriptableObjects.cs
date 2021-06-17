@@ -21,6 +21,13 @@ public class TutorialScriptableObjects : ScriptableObject
     public Vector2 maskAltAnchorMin;
     public Vector2 maskAltAnchorMax;
     public Vector2 maskAltPivot;
+    [Header("Secondary Mask")]
+    public bool usesSecondaryMask;
+    public Vector3 secondaryMaskPosition;
+    public Vector2 secondaryMaskWidthAndHeight;
+    public Vector2 secondaryMaskAnchorMin;
+    public Vector2 secondaryMaskAnchorMax;
+    public Vector2 secondaryMaskPivot;
     [Header("Panel")]
     public Vector3 panelPosition;
     public Vector2 panelWidthAndHeight;
@@ -72,8 +79,18 @@ public class TutorialScriptableObjects : ScriptableObject
         maskAnchorMax = maskTransform.anchorMax;
         maskPivot = maskTransform.pivot;
     }
+    public void SetSecondaryMask(RectTransform maskTransform)
+    {
+        usesSecondaryMask = true;
+        secondaryMaskPosition = maskTransform.anchoredPosition;
+        secondaryMaskWidthAndHeight = maskTransform.sizeDelta;
+        secondaryMaskAnchorMin = maskTransform.anchorMin;
+        secondaryMaskAnchorMax = maskTransform.anchorMax;
+        secondaryMaskPivot = maskTransform.pivot;
+    }
     public void SetAlternateMask(RectTransform maskTransform)
     {
+        usesAltMask = true;
         maskAltPosition = maskTransform.anchoredPosition;
         maskAltWidthAndHeight = maskTransform.sizeDelta;
         maskAltAnchorMin = maskTransform.anchorMin;

@@ -12,6 +12,7 @@ public class TutorialEditor : EditorWindow
     TutorialController tutorialController;
     TutorialScriptableObjects tutorialObject;
     RectTransform maskTransform;
+    RectTransform secondaryMaskTransform;
     RectTransform panelTransform;
     RectTransform triangleTransform;
     [SerializeField]
@@ -47,6 +48,15 @@ public class TutorialEditor : EditorWindow
             if (GUILayout.Button("Save Alternate Mask Transform"))
             {
                 SaveAltMaskTransform();
+            }
+
+            GUILayout.Label("", EditorStyles.boldLabel);
+            GUILayout.Label("Save Secondary Mask Transform", EditorStyles.boldLabel);
+            secondaryMaskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.mapSecondaryMaskTransform, typeof(RectTransform), true) as RectTransform;
+
+            if (GUILayout.Button("Save Secondary Mask Transform"))
+            {
+                SaveSecondaryMask();
             }
 
             GUILayout.Label("", EditorStyles.boldLabel);
@@ -118,6 +128,12 @@ public class TutorialEditor : EditorWindow
         EditorUtility.SetDirty(tutorialObject);
 
     }
+    private void SaveSecondaryMask()
+    {
+        Undo.RecordObject(this, "Secondary Mask Changed");
+        SetSecondaryMaskRect();
+        EditorUtility.SetDirty(tutorialObject);
+    }
     private void SaveAltMaskTransform()
     {
         Undo.RecordObject(tutorialObject, "Set Alternate Mask");
@@ -149,6 +165,10 @@ public class TutorialEditor : EditorWindow
     void SetMaskRect()
     {
         tutorialObject.SetMask(maskTransform);
+    }
+    void SetSecondaryMaskRect()
+    {
+        tutorialObject.SetSecondaryMask(secondaryMaskTransform);
     }
     void SetAltMaskRect()
     {
