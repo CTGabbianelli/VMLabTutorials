@@ -52,7 +52,7 @@ public class TutorialEditor : EditorWindow
 
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Secondary Mask Transform", EditorStyles.boldLabel);
-            secondaryMaskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.mapSecondaryMaskTransform, typeof(RectTransform), true) as RectTransform;
+            secondaryMaskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.secondaryMaskTransform, typeof(RectTransform), true) as RectTransform;
 
             if (GUILayout.Button("Save Secondary Mask Transform"))
             {

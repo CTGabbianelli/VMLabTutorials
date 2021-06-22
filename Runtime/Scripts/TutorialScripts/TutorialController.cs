@@ -214,7 +214,7 @@ public class TutorialController : MonoBehaviour
         //mapButtonSelected();
         currentTutorial = tut;
         SetMapMask(tut);
-        if(tut.usesSecondaryMask == true)
+        if (tut.usesSecondaryMask == true)
         {
             SetSecondaryMapMask(tut);
         }
@@ -388,7 +388,7 @@ public class TutorialController : MonoBehaviour
         secondaryMaskTransform.gameObject.SetActive(false);
         currentTutorial = tut;
         SetMask(tut);
-        if(currentTutorial.usesSecondaryMask == true)
+        if (currentTutorial.usesSecondaryMask == true)
         {
             SetSecondaryMask(tut);
         }
@@ -417,7 +417,7 @@ public class TutorialController : MonoBehaviour
 
         if (currentTutorial != null)
         {
-            if(currentTutorial.usesAltMask)
+            if (currentTutorial.usesAltMask)
             {
                 if (tutorial == Tutorial.Sequence)
                 {
