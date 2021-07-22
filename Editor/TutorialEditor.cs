@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-//#if UNITY_EDITOR
+#if UNITY_Editor
 public class TutorialEditor : EditorWindow
 {
     string informationString;
@@ -199,4 +199,4 @@ public class TutorialEditor : EditorWindow
         tutorialObject.SetInformationText(informationText);
     }
 }
-//#endif
+#endif

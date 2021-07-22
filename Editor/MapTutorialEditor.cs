@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-//#if UNITY_Editor
+#if UNITY_Editor
 [System.Serializable]
 public class MapTutorialEditor : EditorWindow
 {
@@ -239,4 +239,4 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.SetMapTitle(buttonTitleText.text);
     }
 }
-//#endif
+#endif

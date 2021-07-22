@@ -6,6 +6,7 @@ using TMPro;
 
 public class TutorialController : MonoBehaviour
 {
+
     public delegate void TutorialIndexChanged();
     public static event TutorialIndexChanged tutorialIndexChanged;
 
@@ -14,6 +15,9 @@ public class TutorialController : MonoBehaviour
 
     public delegate void MapOpened();
     public static event MapOpened mapOpened;
+
+    public delegate void TutorialReplayed();
+    public static event TutorialReplayed tutorialReplayed;
 
     public delegate void MapButtonSelected();
     public static event MapButtonSelected mapButtonSelected;
@@ -25,6 +29,9 @@ public class TutorialController : MonoBehaviour
     public string playerPrefsString;
 
     public int index;
+    public int skippedIndex;
+    bool skipped;
+    private int addedTutorialsIndex;
 
     public GameObject tutorialBG;
     public GameObject baseParent;
@@ -43,7 +50,7 @@ public class TutorialController : MonoBehaviour
     }
     Tutorial tutorial;
     [SerializeField]
-    List<TutorialScriptableObjects> baseTutorialPresets;
+    public List<TutorialScriptableObjects> baseTutorialPresets;
     [SerializeField]
     List<TutorialMapScriptableObject> mapTutorials;
     public List<GameObject> mapButtons;
@@ -74,6 +81,7 @@ public class TutorialController : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        addedTutorialsIndex = 0;
         //set global reference
         instance = this;
     }
@@ -85,7 +93,7 @@ public class TutorialController : MonoBehaviour
         {
             CreateMap();
         }
-        if (PlayerPrefs.GetString(playerPrefsString) != "Completed")
+        if (PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()) != "Completed")
         {
             StartTutorial();
 
@@ -97,7 +105,7 @@ public class TutorialController : MonoBehaviour
 
 
     }
-
+    //check which tutorial to use
     void CheckTutorialUrl()
     {
         // Read any parameters included in URL
@@ -129,7 +137,7 @@ public class TutorialController : MonoBehaviour
             AddTutorials(0);
         }
     }
-
+    //add specified tutorial
     public void AddTutorials(int index)
     {
         if (tutorialSets.Count > 0)
@@ -140,6 +148,8 @@ public class TutorialController : MonoBehaviour
             }
             tutorialMarkerIcon.Initialize(baseTutorialPresets.Count);
         }
+        addedTutorialsIndex++;
+        skipped = false;
 
 
     }
@@ -166,11 +176,11 @@ public class TutorialController : MonoBehaviour
     //advance through tutorial sequence
     public void AdvanceToNextTutorial()
     {
+        index++;
         secondaryMaskTransform.gameObject.SetActive(false);
-        if (index < baseTutorialPresets.Count - 1)
+        if (index < baseTutorialPresets.Count)
         {
 
-            index++;
             SetTutorial(baseTutorialPresets[index]);
             tutorialMarkerIcon.SetMarkerColor(index);
 
@@ -185,11 +195,9 @@ public class TutorialController : MonoBehaviour
 
 
 
-            if (PlayerPrefs.GetString(playerPrefsString) != "Completed")
+            if (PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()) != "Completed" && skipped == false)
             {
-                PlayerPrefs.SetString(playerPrefsString, "Completed");
-                TutorialCompleted();
-                print("not completed");
+                PlayerPrefs.SetString(playerPrefsString + addedTutorialsIndex.ToString(), "Completed");
             }
 
             tutorial = Tutorial.Inactive;
@@ -197,21 +205,22 @@ public class TutorialController : MonoBehaviour
         tutorialIndexChanged();
 
 
-    }
-    public void TutorialCompleted()
-    {
-        tutorialCompletedFirstTime();
+
+
+
     }
     //skip tutorial by setting index to length of list
     public void SkipTutorial()
     {
-        index = baseTutorialPresets.Count;
+        skipped = true;
+        skippedIndex = index;
+        index = baseTutorialPresets.Count - 1;
         AdvanceToNextTutorial();
 
     }
     public void SetMapTutorial(TutorialScriptableObjects tut)
     {
-        //mapButtonSelected();
+
         currentTutorial = tut;
         SetMapMask(tut);
         if (tut.usesSecondaryMask == true)
@@ -223,8 +232,23 @@ public class TutorialController : MonoBehaviour
         SetMapTitle(tut);
         SetMapInformation(tut);
         mapTutorialPanelAnimator.SetBool("Active", true);
+
+        mapButtonSelected();
+
         StartCoroutine(SetMapButtonLayoutActivity(false));
 
+    }
+    public string GetNameOfCurrentButton()
+    {
+        if (currentTutorial.GetType() == typeof(TutorialMapScriptableObject))
+        {
+
+            return (currentTutorial as TutorialMapScriptableObject).buttonTitle;
+        }
+        else
+        {
+            return "Error : not a button";
+        }
     }
 
     public void StartTutorial()
@@ -254,6 +278,17 @@ public class TutorialController : MonoBehaviour
         }
 
     }
+    public bool CheckTutorialStateCompletion()
+    {
+        if (PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()) != "Completed")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public void JumpToSpecificTutorial(int tempIndex)
     {
@@ -267,6 +302,8 @@ public class TutorialController : MonoBehaviour
     //set index to 0 and reset tutorial
     public void ReplayTutorial()
     {
+        tutorialReplayed();
+        InformationButton.instance.Click();
         StartTutorial();
     }
     //turn off map tutorial
@@ -324,7 +361,7 @@ public class TutorialController : MonoBehaviour
             mapSecondaryMaskTransform.gameObject.SetActive(false);
 
             mapElementIsOpen = false;
-            mapOpened();
+            //mapOpened();
 
             mapButtonParent.SetActive(true);
             mapExitButton.SetBool("Active", true);
