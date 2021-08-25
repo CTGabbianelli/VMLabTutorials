@@ -1,4 +1,4 @@
-Shader "Hidden/ShadowCutout"
+Shader "Hidden/TrueShadow/Cutout"
 {
     Properties
     {
@@ -8,9 +8,9 @@ Shader "Hidden/ShadowCutout"
     SubShader
     {
         Cull Off ZWrite Off ZTest Always
-        Blend Zero One, One One
-        BlendOp Add, RevSub
-        ColorMask a
+        Blend Zero OneMinusSrcAlpha, Zero OneMinusSrcAlpha
+        BlendOp Add, Add
+//        ColorMask a
 
         Pass
         {
@@ -32,7 +32,7 @@ Shader "Hidden/ShadowCutout"
                 float4 vertex : SV_POSITION;
             };
 
-            v2f vert (appdata v)
+            v2f vert(appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
@@ -41,15 +41,17 @@ Shader "Hidden/ShadowCutout"
             }
 
             uniform sampler2D _MainTex;
-            // uniform float4 _MainTex_TexelSize;
             uniform float2 _Offset;
+            uniform float _OverflowAlpha;
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
-                // uint2 pos = i.uv* _MainTex_TexelSize.zw;
-                // float checker = (pos.x + pos.y%2)%2;
-                // return fixed4(0,0,0, tex2D(_MainTex, i.uv + _Offset).a + checker);
-                return fixed4(0,0,0, tex2D(_MainTex, i.uv + _Offset).a);
+                float2 uv = i.uv + _Offset;
+
+                if (any(uv > 1) || any(uv < 0))
+                    return _OverflowAlpha;
+
+                return fixed4(0, 0, 0, tex2D(_MainTex, uv).a);
             }
             ENDCG
         }

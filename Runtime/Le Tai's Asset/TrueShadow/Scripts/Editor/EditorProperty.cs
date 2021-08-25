@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Reflection;
 using UnityEditor;
 
@@ -6,18 +7,19 @@ namespace LeTai.TrueShadow.Editor
 {
 public class EditorProperty
 {
+    public readonly SerializedProperty serializedProperty;
+
     readonly SerializedObject   serializedObject;
-    readonly SerializedProperty serializedProperty;
-    readonly PropertyInfo       property;
+    readonly MethodInfo         propertySetter;
     readonly SerializedProperty dirtyFlag;
 
     public EditorProperty(SerializedObject obj, string name)
     {
+        var propertyName = char.ToLowerInvariant(name[0]) + name.Substring(1);
         serializedObject   = obj;
-        serializedProperty = serializedObject.FindProperty(char.ToLower(name[0]).ToString() + name.Substring(1));
-        property           = serializedObject.targetObject.GetType().GetProperty(name);
-
-        dirtyFlag = serializedObject.FindProperty("modifiedFromInspector");
+        serializedProperty = serializedObject.FindProperty(propertyName);
+        propertySetter     = serializedObject.targetObject.GetType().GetProperty(name).SetMethod;
+        dirtyFlag          = serializedObject.FindProperty("modifiedFromInspector");
     }
 
     public void Draw()
@@ -26,30 +28,29 @@ public class EditorProperty
         {
             EditorGUILayout.PropertyField(serializedProperty);
 
+            if (!scope.changed)
+                return;
 
-            if (scope.changed)
+            dirtyFlag.boolValue = true;
+            serializedObject.ApplyModifiedProperties();
+
+            foreach (var target in serializedObject.targetObjects)
             {
-                dirtyFlag.boolValue = true;
-                serializedObject.ApplyModifiedProperties();
-
-                foreach (var target in serializedObject.targetObjects)
+                switch (serializedProperty.propertyType)
                 {
-                    switch (serializedProperty.propertyType)
-                    {
-                        case SerializedPropertyType.Float:
-                            property.SetMethod.Invoke(target, new object[] {serializedProperty.floatValue});
-                            break;
-                        case SerializedPropertyType.Enum:
-                            property.SetMethod.Invoke(target, new object[] {serializedProperty.enumValueIndex});
-                            break;
-                        case SerializedPropertyType.Boolean:
-                            property.SetMethod.Invoke(target, new object[] {serializedProperty.boolValue});
-                            break;
-                        case SerializedPropertyType.Color:
-                            property.SetMethod.Invoke(target, new object[] {serializedProperty.colorValue});
-                            break;
-                        default: throw new NotImplementedException();
-                    }
+                case SerializedPropertyType.Float:
+                    propertySetter.Invoke(target, new object[] {serializedProperty.floatValue});
+                    break;
+                case SerializedPropertyType.Enum:
+                    propertySetter.Invoke(target, new object[] {serializedProperty.enumValueIndex});
+                    break;
+                case SerializedPropertyType.Boolean:
+                    propertySetter.Invoke(target, new object[] {serializedProperty.boolValue});
+                    break;
+                case SerializedPropertyType.Color:
+                    propertySetter.Invoke(target, new object[] {serializedProperty.colorValue});
+                    break;
+                default: throw new NotImplementedException();
                 }
             }
         }

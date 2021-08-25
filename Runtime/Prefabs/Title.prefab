@@ -64,6 +64,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.9490197, g: 0.9607844, b: 0.9803922, a: 1}
   m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -91,15 +92,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 69.7
+  spread: 0
   offsetAngle: 89.47911
   offsetDistance: 4
   offset: {x: 0.03636432, y: -3.9998348}
   color: {r: 0, g: 0, b: 0, a: 0.15}
+  inset: 0
   blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
   shadowAsSibling: 0
   cutout: 0
   baked: 0
-  colorBleedMode: 0
   modifiedFromInspector: 0
   bakedShadows: []
 --- !u!1 &2842473500545218385
@@ -162,6 +167,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -333,6 +339,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -470,6 +477,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -502,6 +510,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 4862546075905812199}
+          m_TargetAssemblyTypeName: 
           m_MethodName: Click
           m_Mode: 1
           m_Arguments:
@@ -517,6 +526,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 4862546075905812199}
+          m_TargetAssemblyTypeName: 
           m_MethodName: BeginHover
           m_Mode: 1
           m_Arguments:
@@ -532,6 +542,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 4862546075905812199}
+          m_TargetAssemblyTypeName: 
           m_MethodName: EndHover
           m_Mode: 1
           m_Arguments:
@@ -555,15 +566,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 10
+  spread: 0
   offsetAngle: 90
   offsetDistance: 0
   offset: {x: 0, y: -0}
   color: {r: 0, g: 0, b: 0, a: 0.15}
+  inset: 0
   blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
   shadowAsSibling: 0
   cutout: 0
   baked: 0
-  colorBleedMode: 0
   modifiedFromInspector: 0
   bakedShadows: []
 --- !u!114 &4862546075905812199
@@ -646,6 +661,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -701,6 +717,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1072921547064081008}
+          m_TargetAssemblyTypeName: 
           m_MethodName: BeginHover
           m_Mode: 1
           m_Arguments:
@@ -716,6 +733,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1072921547064081008}
+          m_TargetAssemblyTypeName: 
           m_MethodName: EndHover
           m_Mode: 1
           m_Arguments:
@@ -731,6 +749,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 1072921547064081008}
+          m_TargetAssemblyTypeName: 
           m_MethodName: Click
           m_Mode: 1
           m_Arguments:
@@ -754,15 +773,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 10
+  spread: 0
   offsetAngle: 90
   offsetDistance: 0
   offset: {x: 0, y: -0}
-  color: {r: 0, g: 0, b: 0, a: 0.27450982}
+  color: {r: 0, g: 0, b: 0, a: 0.15}
+  inset: 0
   blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
   shadowAsSibling: 0
   cutout: 0
   baked: 0
-  colorBleedMode: 0
   modifiedFromInspector: 0
   bakedShadows: []
 --- !u!1 &7202003131105972388
@@ -826,6 +849,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 0.654902, g: 0.654902, b: 0.654902, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

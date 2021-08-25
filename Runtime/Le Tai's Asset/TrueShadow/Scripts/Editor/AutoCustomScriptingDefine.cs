@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -22,12 +21,9 @@ public static class AutoCustomScriptingDefine
 
     static void AddMissingSymbols(BuildTarget buildTarget)
     {
-        var buildTargetName = buildTarget.ToString();
-        var currentGroup = Enum.GetValues(typeof(BuildTargetGroup))
-                               .Cast<BuildTargetGroup>()
-                               .First(g => buildTargetName.Contains(g.ToString()));
-        var defines = PlayerSettings.GetScriptingDefineSymbolsForGroup(currentGroup).Split(';').ToList();
-        var missing = SYMBOLS.Except(defines).ToList();
+        var currentGroup = BuildPipeline.GetBuildTargetGroup(buildTarget);
+        var defines      = PlayerSettings.GetScriptingDefineSymbolsForGroup(currentGroup).Split(';').ToList();
+        var missing      = SYMBOLS.Except(defines).ToList();
         defines.AddRange(missing);
 
         if (missing.Count > 0)

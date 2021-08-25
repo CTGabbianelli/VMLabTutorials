@@ -2,19 +2,28 @@ using UnityEngine;
 
 namespace LeTai.TrueShadow
 {
-public class ShadowContainer
+class ShadowContainer
 {
-    public RenderTexture Texture { get; }
+    public RenderTexture         Texture               { get; }
+    public ShadowSettingSnapshot Snapshot              { get; }
+    public int                   Padding               { get; }
+    public Vector2               PxMisalignmentAtMinLS { get; }
 
     public int RefCount { get; internal set; }
 
     public readonly int requestHash;
 
-    public ShadowContainer(RenderTexture texture, ShadowRenderingRequest request)
+    internal ShadowContainer(RenderTexture         texture,
+                             ShadowSettingSnapshot snapshot,
+                             int                   padding,
+                             Vector2               pxMisalignmentAtMinLS)
     {
-        Texture     = texture;
-        RefCount    = 1;
-        requestHash = request.GetHashCode();
+        Texture               = texture;
+        Snapshot              = snapshot;
+        Padding               = padding;
+        PxMisalignmentAtMinLS = pxMisalignmentAtMinLS;
+        RefCount              = 1;
+        requestHash           = snapshot.GetHashCode();
     }
 }
 }

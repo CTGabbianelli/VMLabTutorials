@@ -11,7 +11,9 @@ public class InteractiveShadow : MonoBehaviour, IPointerEnterHandler, IPointerEx
                                  IDeselectHandler, IPointerDownHandler, IPointerUpHandler
 {
     public float smoothTime = .05f;
-    public bool  autoDeselect;
+
+    [Tooltip("Deselect on pointer up")]
+    public bool autoDeselect;
 
     [Header("Size")]
     public float selectedSize = 28;
@@ -51,7 +53,7 @@ public class InteractiveShadow : MonoBehaviour, IPointerEnterHandler, IPointerEx
 #if UNITY_EDITOR
     void Reset()
     {
-        shadow = GetComponent<TrueShadow>();
+        shadow = FindTrueShadow();
         if (shadow)
         {
             normalSize     = shadow.Size;
@@ -81,7 +83,7 @@ public class InteractiveShadow : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     void OnEnable()
     {
-        shadow     = GetComponent<TrueShadow>();
+        shadow     = FindTrueShadow();
         selectable = GetComponent<Selectable>();
 
         targetSize     = normalSize     = shadow.Size;
@@ -90,6 +92,21 @@ public class InteractiveShadow : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
         shadow.Size           = targetSize     = normalSize;
         shadow.OffsetDistance = targetDistance = normalDistance;
+    }
+
+    TrueShadow FindTrueShadow()
+    {
+        var shadows = GetComponents<TrueShadow>();
+        if (shadows.Length == 0) return null;
+
+        var ishadows = GetComponents<InteractiveShadow>();
+
+        int index = 0;
+        for (; index < ishadows.Length; index++)
+            if (ishadows[index] == this)
+                break;
+
+        return shadows[index];
     }
 
     void OnStateChange()

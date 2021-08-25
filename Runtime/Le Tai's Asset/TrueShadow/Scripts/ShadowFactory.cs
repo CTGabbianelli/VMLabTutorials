@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using LeTai.Effects;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -14,11 +15,25 @@ public class ShadowFactory
 
     readonly CommandBuffer         cmd;
     readonly MaterialPropertyBlock materialProps;
+    readonly ScalableBlur          blurProcessor;
+    readonly ScalableBlurConfig    blurConfig;
 
     Material cutoutMaterial;
+    Material imprintPostProcessMaterial;
+    Material shadowPostProcessMaterial;
 
     Material CutoutMaterial =>
-        cutoutMaterial ? cutoutMaterial : cutoutMaterial = new Material(Shader.Find("Hidden/ShadowCutout"));
+        cutoutMaterial ? cutoutMaterial : cutoutMaterial = new Material(Shader.Find("Hidden/TrueShadow/Cutout"));
+
+    Material ImprintPostProcessMaterial =>
+        imprintPostProcessMaterial
+            ? imprintPostProcessMaterial
+            : imprintPostProcessMaterial = new Material(Shader.Find("Hidden/TrueShadow/ImprintPostProcess"));
+
+    Material ShadowPostProcessMaterial =>
+        shadowPostProcessMaterial
+            ? shadowPostProcessMaterial
+            : shadowPostProcessMaterial = new Material(Shader.Find("Hidden/TrueShadow/PostProcess"));
 
     private ShadowFactory()
     {
@@ -28,6 +43,20 @@ public class ShadowFactory
                                 new Vector4(float.NegativeInfinity, float.NegativeInfinity,
                                             float.PositiveInfinity, float.PositiveInfinity));
         materialProps.SetInt(ShaderId.COLOR_MASK, (int) ColorWriteMask.All); // Render shadow even if mask hide graphic
+
+        ShaderProperties.Init(8);
+        blurConfig           = ScriptableObject.CreateInstance<ScalableBlurConfig>();
+        blurConfig.hideFlags = HideFlags.HideAndDontSave;
+        blurProcessor        = new ScalableBlur();
+        blurProcessor.Configure(blurConfig);
+    }
+
+    ~ShadowFactory()
+    {
+        cmd.Dispose();
+        Utility.SafeDestroy(blurConfig);
+        Utility.SafeDestroy(cutoutMaterial);
+        Utility.SafeDestroy(imprintPostProcessMaterial);
     }
 
 #if LETAI_TRUESHADOW_DEBUG
@@ -37,10 +66,10 @@ public class ShadowFactory
     // public int createdContainerCount;
     // public int releasedContainerCount;
 
-    public void Get(ShadowRenderingRequest request, ref ShadowContainer container)
+    internal void Get(ShadowSettingSnapshot snapshot, ref ShadowContainer container)
     {
-        if (float.IsNaN(request.size.x) || request.size.x < 1 ||
-            float.IsNaN(request.size.y) || request.size.y < 1)
+        if (float.IsNaN(snapshot.dimensions.x) || snapshot.dimensions.x < 1 ||
+            float.IsNaN(snapshot.dimensions.y) || snapshot.dimensions.y < 1)
         {
             ReleaseContainer(container);
             return;
@@ -48,8 +77,8 @@ public class ShadowFactory
 
 #if LETAI_TRUESHADOW_DEBUG
         RenderTexture.ReleaseTemporary(debugTexture);
-        if (request.shadow.alwaysRender)
-            debugTexture = RenderShadow(request);
+        if (snapshot.shadow.alwaysRender)
+            debugTexture = GenerateShadow(snapshot).Texture;
 #endif
 
         // Each request need a coresponding shadow texture
@@ -58,7 +87,7 @@ public class ShadowFactory
         // ShadowContainer keep track of texture and their usage
 
 
-        int requestHash = request.GetHashCode();
+        int requestHash = snapshot.GetHashCode();
 
         // Case: requester can keep the same texture
         if (container?.requestHash == requestHash)
@@ -75,7 +104,7 @@ public class ShadowFactory
         else
         {
             // Case: requester got new unique texture
-            container = shadowCache[requestHash] = new ShadowContainer(RenderShadow(request), request);
+            container = shadowCache[requestHash] = GenerateShadow(snapshot);
             // Debug.Log($"Created new container for request\t{requestHash}\tTotal Created: {++createdContainerCount}\t Alive: {createdContainerCount - releasedContainerCount}");
         }
     }
@@ -94,81 +123,178 @@ public class ShadowFactory
         // Debug.Log($"Released container for request\t{container.requestHash}\tTotal Released: {++releasedContainerCount}\t Alive: {createdContainerCount - releasedContainerCount}");
     }
 
-    static readonly Rect UNIT_RECT      = new Rect(0, 0, 1, 1);
-    static readonly int  IMPRINT_TEX_ID = Shader.PropertyToID("True Shadow Imprint Buffer");
+    static readonly Rect UNIT_RECT = new Rect(0, 0, 1, 1);
 
-    RenderTexture RenderShadow(ShadowRenderingRequest request)
+    ShadowContainer GenerateShadow(ShadowSettingSnapshot snapshot)
     {
         // return GenColoredTexture(request.GetHashCode());
 
         cmd.Clear();
         cmd.BeginSample("TrueShadow:Capture");
 
-        var tw        = Mathf.CeilToInt(request.size.x + request.shadow.Size * 2);
-        var th        = Mathf.CeilToInt(request.size.y + request.shadow.Size * 2);
-        var shadowTex = RenderTexture.GetTemporary(tw, th, 0, RenderTextureFormat.Default);
-        cmd.GetTemporaryRT(IMPRINT_TEX_ID, tw, th, 0, FilterMode.Bilinear, RenderTextureFormat.Default);
+        var bounds       = snapshot.shadow.SpriteMesh.bounds;
+        var misalignment = CalcMisalignment(snapshot.canvas, snapshot.canvasRt, snapshot.shadow.RectTransform, bounds);
 
-        var texture = request.shadow.Content;
+        var padding      = Mathf.CeilToInt(snapshot.size);
+        var imprintViewW = Mathf.RoundToInt(snapshot.dimensions.x + misalignment.bothSS.x);
+        var imprintViewH = Mathf.RoundToInt(snapshot.dimensions.y + misalignment.bothSS.y);
+        var tw           = imprintViewW + padding * 2;
+        var th           = imprintViewH + padding * 2;
+
+        var shadowTex      = RenderTexture.GetTemporary(tw, th, 0, RenderTextureFormat.ARGB32);
+        var imprintTexDesc = shadowTex.descriptor;
+        imprintTexDesc.msaaSamples = snapshot.shouldAntialiasImprint ? Mathf.Max(1, QualitySettings.antiAliasing) : 1;
+        var imprintTex = RenderTexture.GetTemporary(imprintTexDesc);
+
+        RenderTexture imprintTexProcessed = null;
+
+        bool needProcessImprint = snapshot.shadow.IgnoreCasterColor || snapshot.shadow.Inset;
+        if (needProcessImprint)
+            imprintTexProcessed = RenderTexture.GetTemporary(imprintTexDesc);
+
+        var texture = snapshot.shadow.Content;
         if (texture)
             materialProps.SetTexture(ShaderId.MAIN_TEX, texture);
         else
             materialProps.SetTexture(ShaderId.MAIN_TEX, Texture2D.whiteTexture);
 
-        cmd.SetRenderTarget(IMPRINT_TEX_ID);
-        cmd.ClearRenderTarget(true, true, request.shadow.ClearColor);
+        cmd.SetRenderTarget(imprintTex);
+        cmd.ClearRenderTarget(true, true, snapshot.shadow.ClearColor);
 
-        var padding             = Mathf.CeilToInt(request.shadow.Size);
-        var imprintViewportSize = new Vector2(Mathf.Ceil(request.size.x), Mathf.Ceil(request.size.y));
-        cmd.SetViewport(new Rect(padding, padding, imprintViewportSize.x, imprintViewportSize.y));
-        var expansion = imprintViewportSize - request.size;
-        var bounds    = request.shadow.RectTransform.rect;
+        cmd.SetViewport(new Rect(padding, padding, imprintViewW, imprintViewH));
+
+        var imprintBoundMin = (Vector2) bounds.min - misalignment.minLS;
+        var imprintBoundMax = (Vector2) bounds.max + misalignment.maxLS;
         cmd.SetViewProjectionMatrices(
             Matrix4x4.identity,
-            Matrix4x4.Ortho(bounds.min.x, bounds.max.x + expansion.x,
-                            bounds.min.y, bounds.max.y + expansion.y,
+            Matrix4x4.Ortho(imprintBoundMin.x, imprintBoundMax.x,
+                            imprintBoundMin.y, imprintBoundMax.y,
                             -1, 1)
         );
 
-        request.shadow.ModifyShadowCastingMesh(request.shadow.SpriteMesh);
-        request.shadow.ModifyShadowCastingMaterialProperties(materialProps);
-        cmd.DrawMesh(request.shadow.SpriteMesh,
+        snapshot.shadow.ModifyShadowCastingMesh(snapshot.shadow.SpriteMesh);
+        snapshot.shadow.ModifyShadowCastingMaterialProperties(materialProps);
+        cmd.DrawMesh(snapshot.shadow.SpriteMesh,
                      Matrix4x4.identity,
-                     request.shadow.GetShadowCastingMaterial(),
+                     snapshot.shadow.GetShadowCastingMaterial(),
                      0, 0,
                      materialProps);
+
+        if (needProcessImprint)
+        {
+            ImprintPostProcessMaterial.SetKeyword("BLEACH", snapshot.shadow.IgnoreCasterColor);
+            ImprintPostProcessMaterial.SetKeyword("INSET",  snapshot.shadow.Inset);
+
+            cmd.Blit(imprintTex, imprintTexProcessed, ImprintPostProcessMaterial);
+        }
+
         cmd.EndSample("TrueShadow:Capture");
 
+        var needPostProcess = snapshot.shadow.Spread > 1e-3;
 
         cmd.BeginSample("TrueShadow:Cast");
-        if (request.shadow.Size < 1e-2)
+        RenderTexture blurSrc = needProcessImprint ? imprintTexProcessed : imprintTex;
+        RenderTexture blurDst;
+        if (needPostProcess)
+            blurDst = RenderTexture.GetTemporary(shadowTex.descriptor);
+        else
+            blurDst = shadowTex;
+
+        if (snapshot.size < 1e-2)
         {
-            cmd.Blit(IMPRINT_TEX_ID, shadowTex);
+            cmd.Blit(blurSrc, blurDst);
         }
         else
         {
-            request.shadow.blurProcessor.Blur(cmd, IMPRINT_TEX_ID, UNIT_RECT, shadowTex);
+            blurConfig.Strength = snapshot.size;
+            blurProcessor.Blur(cmd, blurSrc, UNIT_RECT, blurDst);
         }
 
         cmd.EndSample("TrueShadow:Cast");
 
-        if (request.shadow.Cutout)
+        var relativeOffset = new Vector2(snapshot.canvasRelativeOffset.x / tw,
+                                         snapshot.canvasRelativeOffset.y / th);
+        var overflowAlpha = snapshot.shadow.Inset ? 1 : 0;
+        if (needPostProcess)
+        {
+            cmd.BeginSample("TrueShadow:PostProcess");
+
+            ShadowPostProcessMaterial.SetTexture(ShaderId.SHADOW_TEX, blurDst);
+            ShadowPostProcessMaterial.SetVector(ShaderId.OFFSET, relativeOffset);
+            ShadowPostProcessMaterial.SetFloat(ShaderId.OVERFLOW_ALPHA, overflowAlpha);
+            ShadowPostProcessMaterial.SetFloat(ShaderId.ALPHA_MULTIPLIER,
+                                               1f / Mathf.Max(1e-6f, 1f - snapshot.shadow.Spread));
+
+            cmd.SetViewport(UNIT_RECT);
+            cmd.Blit(blurSrc, shadowTex, ShadowPostProcessMaterial);
+
+            cmd.EndSample("TrueShadow:PostProcess");
+        }
+        else if (snapshot.shadow.Cutout)
         {
             cmd.BeginSample("TrueShadow:Cutout");
-            var offset = request.shadow.Offset;
-            offset = request.shadow.transform.InverseTransformDirection(offset);
-            CutoutMaterial.SetVector(ShaderId.OFFSET, new Vector2(offset.x / tw,
-                                                                  offset.y / th));
+
+            CutoutMaterial.SetVector(ShaderId.OFFSET, relativeOffset);
+            CutoutMaterial.SetFloat(ShaderId.OVERFLOW_ALPHA, overflowAlpha);
+
             cmd.SetViewport(UNIT_RECT);
-            cmd.Blit(IMPRINT_TEX_ID, shadowTex, CutoutMaterial);
+            cmd.Blit(blurSrc, shadowTex, CutoutMaterial);
+
             cmd.EndSample("TrueShadow:Cutout");
         }
 
-        cmd.ReleaseTemporaryRT(IMPRINT_TEX_ID);
-
         Graphics.ExecuteCommandBuffer(cmd);
 
-        return shadowTex;
+        RenderTexture.ReleaseTemporary(imprintTex);
+        RenderTexture.ReleaseTemporary(blurSrc);
+        if (needPostProcess)
+            RenderTexture.ReleaseTemporary(blurDst);
+
+        return new ShadowContainer(shadowTex, snapshot, padding, misalignment.minLS);
+    }
+
+    readonly struct PixelMisalignment
+    {
+        public readonly Vector2 bothSS;
+        public readonly Vector2 minLS;
+        public readonly Vector2 maxLS;
+
+        public PixelMisalignment(Vector2 bothSS, Vector2 minLS, Vector2 maxLS)
+        {
+            this.bothSS = bothSS;
+            this.minLS  = minLS;
+            this.maxLS  = maxLS;
+        }
+    }
+
+    PixelMisalignment CalcMisalignment(Canvas canvas, RectTransform canvasRt, RectTransform casterRt, Bounds meshBound)
+    {
+        PixelMisalignment misalignment;
+
+        if (canvas.renderMode == RenderMode.WorldSpace)
+        {
+            misalignment = new PixelMisalignment();
+        }
+        else
+        {
+            var referenceCamera = canvas.renderMode == RenderMode.ScreenSpaceCamera ? canvas.worldCamera : null;
+
+            var pxMisalignmentAtMin = casterRt.LocalToScreenPoint(meshBound.min, referenceCamera).Frac();
+            var pxMisalignmentAtMax =
+                Vector2.one - casterRt.LocalToScreenPoint(meshBound.max, referenceCamera).Frac();
+            if (pxMisalignmentAtMax.x > 1 - 1e-5)
+                pxMisalignmentAtMax.x = 0;
+            if (pxMisalignmentAtMax.y > 1 - 1e-5)
+                pxMisalignmentAtMax.y = 0;
+
+            misalignment = new PixelMisalignment(
+                pxMisalignmentAtMin + pxMisalignmentAtMax,
+                canvasRt.ScreenToCanvasSize(pxMisalignmentAtMin, referenceCamera),
+                canvasRt.ScreenToCanvasSize(pxMisalignmentAtMax, referenceCamera)
+            );
+        }
+
+        return misalignment;
     }
 
     RenderTexture GenColoredTexture(int hash)

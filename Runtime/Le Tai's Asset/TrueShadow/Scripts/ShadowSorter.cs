@@ -8,7 +8,6 @@ namespace LeTai.TrueShadow
 public class ShadowSorter : MonoBehaviour
 {
 #region SortDataContainer
-
     readonly struct SortEntry : IComparable<SortEntry>
     {
         public readonly TrueShadow shadow;
@@ -59,7 +58,6 @@ public class ShadowSorter : MonoBehaviour
             return obj is SortGroup other && other.parentTransform == parentTransform;
         }
     }
-
 #endregion
 
 
@@ -76,6 +74,15 @@ public class ShadowSorter : MonoBehaviour
                 {
                     Destroy(existings[i]);
                 }
+
+#if UNITY_EDITOR
+                var hidden = GameObject.Find("/" + nameof(ShadowSorter));
+                while (hidden)
+                {
+                    DestroyImmediate(hidden);
+                    hidden = GameObject.Find("/" + nameof(ShadowSorter));
+                }
+#endif
 
                 instance = existings.Length > 0 ? existings[0] : null;
 

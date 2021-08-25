@@ -51,7 +51,7 @@ public class ScalableBlurConfig : BlurConfig
     /// </value>
     public float Strength
     {
-        get { return strength = Radius * Pow(2, Iteration); }
+        get { return strength = radius * (3 * (1 << iteration) - 2) / UNIT_VARIANCE; }
         set
         {
             strength = Max(0, value);
@@ -59,7 +59,14 @@ public class ScalableBlurConfig : BlurConfig
         }
     }
 
-    static readonly float UNIT_VARIANCE = 2f;
+    // With the "correct" unit variance, the edge of the shadow at higher stddev go below 8bit fixed point resolution
+    // We "wastes" processing power on these.
+    // TODO: optimize that:
+    // The maximum distance that will show up is:
+    // e^(-D^2 / 2R^2) < .5/256
+    // => D < 3*sqrt(2*log(2)) * R ~ 3.53223*R
+    // Can probably stop sooner than that
+    static readonly float UNIT_VARIANCE = 1f + Sqrt(2f) / 2f;
 
     /// <summary>
     /// Calculate size and iteration from strength
@@ -88,6 +95,7 @@ public class ScalableBlurConfig : BlurConfig
         // I >= log(1/6 * (sqrt(12S + 1) + 5))/log(2)
         //
         // There still some artifact at the lower end, not sure how to handle that yet
+        // TODO: use a different algorithm for low Strength.
 
         iteration = CeilToInt(Log(1 / 6f * (Sqrt(12 * variance + 1) + 5)) / Log(2));
 

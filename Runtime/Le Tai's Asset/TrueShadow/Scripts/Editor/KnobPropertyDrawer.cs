@@ -12,15 +12,8 @@ public class KnobPropertyDrawer : PropertyDrawer
 {
     public static bool procrastinationMode = false;
 
-    static readonly Texture2D KNOB_BG_TEXTURE = FindAsset<Texture2D>("Knob_BG");
-    static readonly Texture2D KNOB_FG_TEXTURE = FindAsset<Texture2D>("Knob_FG");
-
-    static T FindAsset<T>(string assetName) where T : UnityEngine.Object
-    {
-        var guids = AssetDatabase.FindAssets("l:TrueShadowEditorResources " + assetName);
-        var path  = AssetDatabase.GUIDToAssetPath(guids[0]);
-        return AssetDatabase.LoadAssetAtPath<T>(path);
-    }
+    static readonly Texture2D KNOB_BG_TEXTURE = Utility.FindAsset<Texture2D>("Knob_BG");
+    static readonly Texture2D KNOB_FG_TEXTURE = Utility.FindAsset<Texture2D>("Knob_FG");
 
     static readonly MethodInfo DO_FLOAT_FIELD_METHOD;
     static readonly FieldInfo  RECYCLED_EDITOR_PROPERTY;
@@ -32,8 +25,7 @@ public class KnobPropertyDrawer : PropertyDrawer
 
     static KnobPropertyDrawer()
     {
-        var editorGUIType     = typeof(EditorGUI);
-        var editorGUIUtilType = typeof(EditorGUIUtility);
+        var editorGUIType = typeof(EditorGUI);
 
         const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Static;
 
@@ -51,12 +43,18 @@ public class KnobPropertyDrawer : PropertyDrawer
         RECYCLED_EDITOR_PROPERTY        = editorGUIType.GetField("s_RecycledEditor",        flags);
         FLOAT_FIELD_FORMAT_STRING_CONST = editorGUIType.GetField("kFloatFieldFormatString", flags);
 
-
-        var defaultBackgroundColor = (Color?) editorGUIUtilType.GetMethod("GetDefaultBackgroundColor", flags)
-                                                              ?.Invoke(null, null) ?? new Color(0.22f, 0.22f, 0.22f);
-        KNOB_BG_COLOR        = Lighten(defaultBackgroundColor, .2f);
-        KNOB_FG_COLOR        = EGU.GetBuiltinSkin(EditorSkin.Inspector).FindStyle("ControlLabel").normal.textColor;
-        KNOB_FG_COLOR_ACTIVE = EGU.GetBuiltinSkin(EditorSkin.Inspector).FindStyle("ControlLabel").active.textColor;
+        if (EGU.isProSkin)
+        {
+            KNOB_BG_COLOR        = new Color(.164f, .164f, .164f);
+            KNOB_FG_COLOR        = new Color(.701f, .701f, .701f);
+            KNOB_FG_COLOR_ACTIVE = new Color(.49f,  .67f,  .94f);
+        }
+        else
+        {
+            KNOB_BG_COLOR        = new Color(.941f, .941f, .941f);
+            KNOB_FG_COLOR        = new Color(.239f, .239f, .239f);
+            KNOB_FG_COLOR_ACTIVE = new Color(.054f, .274f, .549f);
+        }
     }
 
     static float DoFloatFieldInternal(Rect     position,
@@ -98,7 +96,7 @@ public class KnobPropertyDrawer : PropertyDrawer
 
     static float ControlHeight => EGU.singleLineHeight * 2.0f;
     static float KnobSize      => EGU.singleLineHeight * 2.5f;
-    static float KnobOffset    => (ControlHeight - KnobSize) / 2;
+    static float KnobYOffset   => (ControlHeight - KnobSize) / 2;
 
     static Color Lighten(Color color, float amount)
     {
@@ -119,14 +117,15 @@ public class KnobPropertyDrawer : PropertyDrawer
                 height = EGU.singleLineHeight
             };
 
-            int fieldId   = GUIUtility.GetControlID(FocusType.Passive, labelRect);
+            int fieldId   = GUIUtility.GetControlID(FocusType.Keyboard, labelRect);
             var fieldRect = EditorGUI.PrefixLabel(labelRect, fieldId, propScope.content);
-            labelRect.xMax =  fieldRect.x;
-            fieldRect.x    += KnobSize;
+            labelRect.xMax  =  fieldRect.x;
+            fieldRect.x     += ControlHeight;
+            fieldRect.width -= ControlHeight;
 
 
-            Rect knobRect = new Rect(rect.x + EGU.labelWidth + KnobOffset,
-                                     rect.y + KnobOffset,
+            Rect knobRect = new Rect(rect.x + EGU.labelWidth + KnobYOffset,
+                                     rect.y + KnobYOffset,
                                      KnobSize, KnobSize);
             int knobId = GUIUtility.GetControlID(FocusType.Passive, knobRect);
 
@@ -150,11 +149,14 @@ public class KnobPropertyDrawer : PropertyDrawer
                 {
                     var notRotated = GUI.matrix;
                     var oldColor   = GUI.color;
+                    var highlighted = GUIUtility.hotControl == knobId ||
+                                      GUIUtility.hotControl == fieldId ||
+                                      GUIUtility.keyboardControl == fieldId;
 
                     GUIUtility.RotateAroundPivot(angle, knobRect.center);
                     GUI.color = KNOB_BG_COLOR;
                     GUI.DrawTexture(knobRect, KNOB_BG_TEXTURE, ScaleMode.ScaleToFit, true, 1);
-                    GUI.color = GUIUtility.hotControl == knobId ? KNOB_FG_COLOR_ACTIVE : KNOB_FG_COLOR;
+                    GUI.color = highlighted ? KNOB_FG_COLOR_ACTIVE : KNOB_FG_COLOR;
                     if (procrastinationMode) GUI.color = Color.red;
                     GUI.DrawTexture(knobRect, KNOB_FG_TEXTURE, ScaleMode.ScaleToFit, true, 1);
 

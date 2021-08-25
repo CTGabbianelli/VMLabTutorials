@@ -98,5 +98,37 @@ public static class ExtensionMethods
 
         action();
     }
+
+    public static void SetKeyword(this Material material, string keyword, bool enabled)
+    {
+        if (enabled)
+            material.EnableKeyword(keyword);
+        else
+            material.DisableKeyword(keyword);
+    }
+
+    public static Vector2 Frac(this Vector2 vec)
+    {
+        return new Vector2(
+            vec.x - Mathf.Floor(vec.x),
+            vec.y - Mathf.Floor(vec.y)
+        );
+    }
+
+    public static Vector2 LocalToScreenPoint(this RectTransform rt,
+                                             Vector3            localPoint,
+                                             Camera             referenceCamera = null)
+    {
+        return RectTransformUtility.WorldToScreenPoint(referenceCamera, rt.TransformPoint(localPoint));
+    }
+
+    public static Vector2 ScreenToCanvasSize(this RectTransform rt,
+                                             Vector2            size,
+                                             Camera             referenceCamera = null)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, Vector2.zero, referenceCamera, out var start);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(rt, size,         referenceCamera, out var end);
+        return end - start;
+    }
 }
 }

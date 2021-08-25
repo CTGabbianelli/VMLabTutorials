@@ -23,9 +23,9 @@ public interface ITrueShadowCasterClearColorProvider
     Color GetTrueShadowCasterClearColor();
 }
 
-public interface ITrueShadowRendererNormalMaterialProvider
+public interface ITrueShadowRendererMaterialProvider
 {
-    Material GetTrueShadowRendererNormalMaterial();
+    Material GetTrueShadowRendererMaterial();
 }
 
 public interface ITrueShadowRendererMaterialModifier

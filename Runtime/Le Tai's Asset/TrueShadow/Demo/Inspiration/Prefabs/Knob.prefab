@@ -56,12 +56,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2992981781017954244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.95529413, g: 0.9594118, b: 0.98, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -74,6 +76,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2992981781017954264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,17 +90,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 16
-  offsetAngle: 46.218872
-  offsetDistance: 3.5
+  spread: 0
+  offsetAngle: 45
+  offsetDistance: 2
   offset: {x: 2.4216688, y: -2.5269587}
   color: {r: 0.22338234, g: 0.22338234, b: 0.245, a: 0.2509804}
+  inset: 0
   blendMode: 0
-  colorBleedMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
+  shadowAsSibling: 0
   cutout: 0
   baked: 0
   modifiedFromInspector: 0
   bakedShadows: []
-  alwaysRender: 0
 --- !u!1 &2992981781424225395
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,6 +163,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2992981782872531586}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
         m_MethodName: set_fillAmount
         m_Mode: 0
         m_Arguments:
@@ -221,12 +229,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2992981782242018307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.2784314, g: 0.5568628, b: 0.97647065, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -239,6 +249,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2992981782242018305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,17 +263,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 14.69
+  spread: 0
   offsetAngle: 46.218872
   offsetDistance: 0
   offset: {x: 0, y: -0}
   color: {r: 1, g: 1, b: 1, a: 0.73333335}
+  inset: 0
   blendMode: 0
-  colorBleedMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
+  shadowAsSibling: 0
   cutout: 0
   baked: 0
   modifiedFromInspector: 0
   bakedShadows: []
-  alwaysRender: 0
 --- !u!1 &2992981782872531599
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,12 +333,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2992981782872531599}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.27843145, g: 0.55783373, b: 0.9764706, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -336,6 +353,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2992981782872531597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,15 +366,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 14.69
+  size: 10
+  spread: 0.2
   offsetAngle: 46.218872
   offsetDistance: 0
   offset: {x: 0, y: -0}
-  color: {r: 1, g: 1, b: 1, a: 0.5137255}
+  color: {r: 1, g: 1, b: 1, a: 0.7490196}
+  inset: 0
   blendMode: 0
-  colorBleedMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
+  shadowAsSibling: 0
   cutout: 0
   baked: 0
   modifiedFromInspector: 0
   bakedShadows: []
-  alwaysRender: 0

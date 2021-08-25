@@ -257,15 +257,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 64
+  spread: 0
   offsetAngle: 90
   offsetDistance: 4
   offset: {x: 0, y: 0}
   color: {r: 1, g: 1, b: 1, a: 1}
+  inset: 0
   blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
   shadowAsSibling: 0
   cutout: 0
   baked: 0
-  colorBleedMode: 0
   modifiedFromInspector: 0
   bakedShadows: []
   alwaysRender: 0

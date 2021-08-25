@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace LeTai.TrueShadow
@@ -16,7 +14,8 @@ public partial class ShadowRenderer : MonoBehaviour, ILayoutIgnorer, IMaterialMo
 
     TrueShadow    shadow;
     RectTransform rt;
-    Graphic       graphic;
+    RawImage      graphic;
+    Texture       shadowTexture;
 
     public static void Initialize(TrueShadow shadow, ref ShadowRenderer renderer)
     {
@@ -36,29 +35,17 @@ public partial class ShadowRenderer : MonoBehaviour, ILayoutIgnorer, IMaterialMo
 #endif
         };
 
+#if LETAI_TRUESHADOW_DEBUG && UNITY_EDITOR
+        UnityEditor.SceneVisibilityManager.instance.DisablePicking(obj, true);
+#endif
+
         shadow.SetHierachyDirty();
 
         var rt = obj.AddComponent<RectTransform>();
         rt.anchorMin = Vector2.zero;
         rt.anchorMax = Vector2.zero;
 
-        Graphic graphic;
-        var     type = shadow.Baked ? GraphicType.Image : GraphicType.RawImage;
-        switch (type)
-        {
-            case GraphicType.Image:
-                var image = obj.AddComponent<Image>();
-                image.useSpriteMesh = true;
-
-                graphic = image;
-                break;
-            case GraphicType.RawImage:
-                graphic = obj.AddComponent<RawImage>();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
-
+        var graphic = obj.AddComponent<RawImage>();
         graphic.raycastTarget = false;
         graphic.color         = shadow.Color;
 
@@ -72,7 +59,7 @@ public partial class ShadowRenderer : MonoBehaviour, ILayoutIgnorer, IMaterialMo
         renderer.UpdateMaterial();
 
         renderer.CanvasRenderer = obj.GetComponent<CanvasRenderer>();
-        renderer.CanvasRenderer.SetColor(shadow.CanvasRenderer.GetColor());
+        renderer.CanvasRenderer.SetColor(shadow.IgnoreCasterColor ? Color.white : shadow.CanvasRenderer.GetColor());
         renderer.CanvasRenderer.SetAlpha(shadow.CanvasRenderer.GetAlpha());
 
         renderer.ReLayout();
@@ -84,86 +71,70 @@ public partial class ShadowRenderer : MonoBehaviour, ILayoutIgnorer, IMaterialMo
         graphic.material = mat ? mat : shadow.GetShadowRenderingNormalMaterial();
     }
 
-    enum GraphicType
+    internal void ReLayout()
     {
-        Image,
-        RawImage
-    }
+        if (!isActiveAndEnabled)
+            return;
 
-//     void RecreateGraphic(GraphicType type)
-//     {
-//         var graphics = GetComponents<Graphic>();
-//         for (var i = 0; i < graphics.Length; i++)
-//         {
-// #if UNITY_EDITOR
-//             DestroyImmediate(graphics[i]);
-// #else
-//             Destroy(graphics[i]);
-// #endif
-//     }
-
-    public void ReLayout()
-    {
-        var hostRT = shadow.RectTransform;
-        if (!hostRT)
+        var casterRt = shadow.RectTransform;
+        if (!casterRt)
         {
             CanvasRenderer.SetAlpha(0);
             return;
         }
 
-        var casterSize = hostRT.rect.size;
-        if (casterSize == Vector2.zero)
+        if (!shadowTexture)
         {
             CanvasRenderer.SetAlpha(0);
             return;
         }
 
-        var padding = Mathf.CeilToInt(shadow.Size);
-        var tw      = Mathf.CeilToInt(casterSize.x + shadow.Size * 2);
-        var th      = Mathf.CeilToInt(casterSize.y + shadow.Size * 2);
+        var container   = shadow.ShadowContainer;
+        var canvasScale = container?.Snapshot?.canvasScale ?? graphic.canvas.scaleFactor;
 
-        var expansion = padding * Vector2.one;
-        var size      = new Vector2(tw, th);
-        rt.sizeDelta = size;
+        var shadowTexSize = new Vector2(shadowTexture.width, shadowTexture.height) / canvasScale;
+        rt.sizeDelta = shadowTexSize;
 
         // pivot should be relative to the un-blurred part of the texture, not the whole mesh
-        rt.pivot = hostRT.pivot * casterSize / size + expansion / size;
+        var casterPivotLS = -(Vector2) shadow.SpriteMesh.bounds.min;
+        var padding = (container?.Padding ?? Mathf.CeilToInt(shadow.Size * canvasScale)) / canvasScale * Vector2.one;
+        var misalign = container?.PxMisalignmentAtMinLS ?? Vector2.zero;
+        rt.pivot = (casterPivotLS + padding + misalign) / shadowTexSize;
 
-        var offset = shadow.Offset.WithZ(0);
 
-        if (!shadow.ShadowAsSibling)
-        {
-            offset = hostRT.InverseTransformDirection(offset);
-        }
+        var canvasRelativeOffset = container?.Snapshot?.canvasRelativeOffset / canvasScale ?? shadow.Offset;
+        var offset = shadow.ShadowAsSibling
+                         ? shadow.Offset.WithZ(0)
+                         : canvasRelativeOffset.WithZ(0);
+        rt.localPosition = shadow.ShadowAsSibling
+                               ? casterRt.localPosition + offset
+                               : offset;
 
-        rt.localPosition = shadow.ShadowAsSibling ? hostRT.localPosition + offset : offset;
-        rt.localRotation = shadow.ShadowAsSibling ? hostRT.localRotation : Quaternion.identity;
-        rt.localScale    = shadow.ShadowAsSibling ? hostRT.localScale : Vector3.one;
+        rt.localRotation = shadow.ShadowAsSibling ? casterRt.localRotation : Quaternion.identity;
+        rt.localScale    = shadow.ShadowAsSibling ? casterRt.localScale : Vector3.one;
 
-        graphic.color = shadow.Color;
-        CanvasRenderer.SetColor(shadow.CanvasRenderer.GetColor());
+
+        var color = shadow.Color;
+        if (shadow.UseCasterAlpha)
+            color.a *= shadow.Graphic.color.a;
+        graphic.color = color;
+
+        CanvasRenderer.SetColor(shadow.IgnoreCasterColor ? Color.white : shadow.CanvasRenderer.GetColor());
         CanvasRenderer.SetAlpha(shadow.CanvasRenderer.GetAlpha());
+
+        graphic.Rebuild(CanvasUpdate.PreRender);
     }
 
     public void SetTexture(Texture texture)
     {
-        if (!(graphic is RawImage))
-        {
-            // RecreateGraphic(GraphicType.RawImage);
-        }
-
+        shadowTexture = texture;
         CanvasRenderer.SetTexture(texture);
-        ((RawImage) graphic).texture = texture;
+        graphic.texture = texture;
     }
 
-    public void SetSprite(Sprite sprite)
+    public void SetMaterialDirty()
     {
-        if (!(graphic is Image))
-        {
-            // RecreateGraphic(GraphicType.Image);
-        }
-
-        ((Image) graphic).sprite = sprite;
+        graphic.SetMaterialDirty();
     }
 
     public void ModifyMesh(VertexHelper vertexHelper)
@@ -181,6 +152,7 @@ public partial class ShadowRenderer : MonoBehaviour, ILayoutIgnorer, IMaterialMo
 
     protected virtual void LateUpdate()
     {
+        // Destroy events are not consistently called for some reason, have to poll
         if (!shadow)
             Dispose();
     }

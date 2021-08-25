@@ -99,14 +99,26 @@ public partial class TrueShadow
 
         Graphic.RegisterDirtyLayoutCallback(SetLayoutTextureDirty);
         Graphic.RegisterDirtyVerticesCallback(SetLayoutTextureDirty);
-        Graphic.RegisterDirtyMaterialCallback(() =>
-        {
-            SetLayoutTextureDirty();
-            shadowRenderer.UpdateMaterial();
-        });
+        Graphic.RegisterDirtyMaterialCallback(OnGraphicMaterialDirty);
 
         CheckHierarchyDirtied();
         CheckTransformDirtied();
+    }
+
+    void TerminateInvalidator()
+    {
+        if (Graphic)
+        {
+            Graphic.UnregisterDirtyLayoutCallback(SetLayoutTextureDirty);
+            Graphic.UnregisterDirtyVerticesCallback(SetLayoutTextureDirty);
+            Graphic.UnregisterDirtyMaterialCallback(OnGraphicMaterialDirty);
+        }
+    }
+
+    void OnGraphicMaterialDirty()
+    {
+        SetLayoutTextureDirty();
+        shadowRenderer.UpdateMaterial();
     }
 
     internal void CheckTransformDirtied()
@@ -168,19 +180,23 @@ public partial class TrueShadow
 
     public void ModifyMesh(Mesh mesh)
     {
-        // not called according to unity source code
-        throw new NotImplementedException();
+        if (!isActiveAndEnabled) return;
+
+        if (SpriteMesh) Utility.SafeDestroy(SpriteMesh);
+        SpriteMesh = Instantiate(mesh);
+
+        SetLayoutTextureDirty();
     }
 
     public void ModifyMesh(VertexHelper verts)
     {
         if (!isActiveAndEnabled) return;
 
-        SetLayoutTextureDirty();
-
         // For when pressing play while in prefab mode
         if (!SpriteMesh) SpriteMesh = new Mesh();
         verts.FillMesh(SpriteMesh);
+
+        SetLayoutTextureDirty();
     }
 
     void SetLayoutTextureDirty()

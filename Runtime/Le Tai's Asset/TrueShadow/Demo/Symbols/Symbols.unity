@@ -587,15 +587,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 80
+  spread: 0
   offsetAngle: 90
   offsetDistance: 36
   offset: {x: 0.0000021457674, y: -36}
   color: {r: 0, g: 0, b: 0, a: 0.29803923}
+  inset: 0
   blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
   shadowAsSibling: 0
   cutout: 0
   baked: 0
-  colorBleedMode: 4
   modifiedFromInspector: 0
   bakedShadows: []
   alwaysRender: 0
@@ -821,11 +825,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
-      propertyPath: size
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
-        type: 3}
       propertyPath: color.a
       value: 0.5647059
       objectReference: {fileID: 0}
@@ -843,6 +842,11 @@ PrefabInstance:
         type: 3}
       propertyPath: color.b
       value: 0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
+        type: 3}
+      propertyPath: modifiedFromInspector
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985686, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
@@ -1019,11 +1023,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
-      propertyPath: size
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
-        type: 3}
       propertyPath: color.a
       value: 0.5647059
       objectReference: {fileID: 0}
@@ -1041,6 +1040,11 @@ PrefabInstance:
         type: 3}
       propertyPath: color.b
       value: 0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
+        type: 3}
+      propertyPath: modifiedFromInspector
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985686, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
@@ -1323,11 +1327,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
-      propertyPath: size
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
-        type: 3}
       propertyPath: color.a
       value: 0.56078434
       objectReference: {fileID: 0}
@@ -1520,11 +1519,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
-      propertyPath: size
-      value: 28
-      objectReference: {fileID: 0}
-    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
-        type: 3}
       propertyPath: color.a
       value: 0.5647059
       objectReference: {fileID: 0}
@@ -1542,6 +1536,11 @@ PrefabInstance:
         type: 3}
       propertyPath: color.b
       value: 0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 296010130046985684, guid: 7126ede44618dad4d86afb7d922e9816,
+        type: 3}
+      propertyPath: modifiedFromInspector
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 296010130046985686, guid: 7126ede44618dad4d86afb7d922e9816,
         type: 3}
@@ -1813,6 +1812,7 @@ MonoBehaviour:
   - {fileID: 704694979}
   - {fileID: 1172447381}
   - {fileID: 664493554}
+  - {fileID: 1632953815}
 --- !u!222 &1261964162
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2079,6 +2079,7 @@ GameObject:
   - component: {fileID: 1632953812}
   - component: {fileID: 1632953814}
   - component: {fileID: 1632953813}
+  - component: {fileID: 1632953815}
   m_Layer: 5
   m_Name: Header
   m_TagString: Untagged
@@ -2146,6 +2147,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1632953811}
   m_CullTransparentMesh: 0
+--- !u!114 &1632953815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632953811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c162dc854d2f24fa639ba0623de5ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 24
+  spread: 0
+  offsetAngle: 90
+  offsetDistance: 12
+  offset: {x: 0.00000071525585, y: -12}
+  color: {r: 0, g: 0, b: 0, a: 0.48235294}
+  inset: 0
+  blendMode: 0
+  useCasterAlpha: 1
+  ignoreCasterColor: 0
+  colorBleedMode: 2
+  shadowAsSibling: 0
+  cutout: 0
+  baked: 0
+  modifiedFromInspector: 0
+  bakedShadows: []
+  alwaysRender: 0
 --- !u!1 &1663174564
 GameObject:
   m_ObjectHideFlags: 0

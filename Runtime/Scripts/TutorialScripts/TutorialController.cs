@@ -129,7 +129,7 @@ public class TutorialController : MonoBehaviour
             }
             else
             {
-                AddTutorials(0);
+                AddTutorials(1);
             }
         }
         else

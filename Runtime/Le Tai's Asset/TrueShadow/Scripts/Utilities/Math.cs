@@ -16,6 +16,15 @@ public static class Math
     {
         return Quaternion.Euler(0, 0, -angle) * zeroVector * distance;
     }
+
+    public static Vector2 Rotate(this Vector2 v, float angle)
+    {
+        var rad = angle * Deg2Rad;
+        var s   = Sin(rad);
+        var c   = Cos(rad);
+        return new Vector2(c * v.x - s * v.y,
+                           s * v.x + c * v.y);
+    }
 }
 
 public class FloatComparer : IEqualityComparer<float>

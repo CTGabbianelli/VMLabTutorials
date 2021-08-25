@@ -1,4 +1,4 @@
-Shader "UI/TrueShadow-Addictive"
+Shader "UI/TrueShadow-Screen"
 {
     Properties
     {
@@ -39,8 +39,7 @@ Shader "UI/TrueShadow-Addictive"
         Lighting Off
         ZWrite Off
         ZTest [unity_GUIZTestMode]
-        Blend SrcAlpha One
-//        Blend OneMinusDstColor One
+        Blend OneMinusDstColor One
         ColorMask [_ColorMask]
 
         Pass

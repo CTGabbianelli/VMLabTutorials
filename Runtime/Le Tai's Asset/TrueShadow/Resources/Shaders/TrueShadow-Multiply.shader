@@ -44,13 +44,13 @@ Shader "UI/TrueShadow-Multiply"
 
         Pass
         {
-        CGPROGRAM
-        #define DO_BLEND_POSTPROCESS color.rgb = lerp(1, color.rgb, color.a);
+            CGPROGRAM
+            #define DO_BLEND_POSTPROCESS color.rgb = 1 - color.a + color.rgb;
 
-        #include "TrueShadow.cginc"
-        #pragma vertex vert
-        #pragma fragment frag
-        ENDCG
+            #include "TrueShadow.cginc"
+            #pragma vertex vert
+            #pragma fragment frag
+            ENDCG
         }
     }
 }

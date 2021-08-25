@@ -13,6 +13,14 @@ public partial class ShadowRenderer
 
     internal static void ClearMaskMaterialCache()
     {
+        foreach (var keyValuePair in MASK_MATERIALS_CACHE)
+        {
+            if(Application.isPlaying)
+                Destroy(keyValuePair.Value);
+            else
+                DestroyImmediate(keyValuePair.Value);
+        }
+
         MASK_MATERIALS_CACHE.Clear();
     }
 
