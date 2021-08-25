@@ -309,14 +309,14 @@ MonoBehaviour:
   offset: {x: 0, y: 0}
   color: {r: 1, g: 1, b: 1, a: 1}
   inset: 0
-  blendMode: 0
+  blendMode: 1
   useCasterAlpha: 1
   ignoreCasterColor: 0
   colorBleedMode: 2
   shadowAsSibling: 0
   cutout: 0
   baked: 0
-  modifiedFromInspector: 0
+  modifiedFromInspector: 1
   bakedShadows: []
 --- !u!114 &4600268426162591586
 MonoBehaviour:
