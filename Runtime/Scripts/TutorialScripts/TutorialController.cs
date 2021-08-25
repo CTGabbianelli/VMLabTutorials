@@ -303,7 +303,6 @@ public class TutorialController : MonoBehaviour
     public void ReplayTutorial()
     {
         tutorialReplayed();
-        InformationButton.instance.Click();
         StartTutorial();
     }
     //turn off map tutorial
