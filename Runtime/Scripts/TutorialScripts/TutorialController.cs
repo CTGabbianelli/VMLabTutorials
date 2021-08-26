@@ -88,7 +88,7 @@ public class TutorialController : MonoBehaviour
     public void Initialize()
     {
         CheckTutorialUrl();
-
+        print(PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()));
         if (mapTutorials.Count != 0)
         {
             CreateMap();
@@ -134,7 +134,7 @@ public class TutorialController : MonoBehaviour
         }
         else
         {
-            AddTutorials(0);
+            AddTutorials(1);
         }
     }
     //add specified tutorial
@@ -303,6 +303,7 @@ public class TutorialController : MonoBehaviour
     public void ReplayTutorial()
     {
         tutorialReplayed();
+        InformationButton.instance.Click();
         StartTutorial();
     }
     //turn off map tutorial
@@ -402,10 +403,6 @@ public class TutorialController : MonoBehaviour
         if (isActive == true)
         {
             baseParent.SetActive(true);
-            if (PlayerPrefs.GetString(playerPrefsString) == "Completed")
-            {
-                InformationButton.instance.Click();
-            }
         }
         else
         {
