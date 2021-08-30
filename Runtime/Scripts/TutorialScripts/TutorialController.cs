@@ -87,12 +87,16 @@ public class TutorialController : MonoBehaviour
     }
     public void Initialize()
     {
+        //check tutorial set to be used based on url 
         CheckTutorialUrl();
-        print(PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()));
+        
+        //if the map has buttons create them
         if (mapTutorials.Count != 0)
         {
             CreateMap();
         }
+
+        //if user has already finished the tutorial don't automatically start
         if (PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()) != "Completed")
         {
             StartTutorial();
@@ -105,6 +109,7 @@ public class TutorialController : MonoBehaviour
 
 
     }
+
     //check which tutorial to use
     void CheckTutorialUrl()
     {
@@ -154,6 +159,7 @@ public class TutorialController : MonoBehaviour
 
     }
 
+    //create all tutorial map buttons
     void CreateMap()
     {
         GameObject tempMapDot;
@@ -218,6 +224,7 @@ public class TutorialController : MonoBehaviour
         AdvanceToNextTutorial();
 
     }
+    //show the activated map tutorial
     public void SetMapTutorial(TutorialScriptableObjects tut)
     {
 
@@ -238,6 +245,8 @@ public class TutorialController : MonoBehaviour
         StartCoroutine(SetMapButtonLayoutActivity(false));
 
     }
+
+    //get name of a specific button
     public string GetNameOfCurrentButton()
     {
         if (currentTutorial.GetType() == typeof(TutorialMapScriptableObject))
@@ -251,6 +260,7 @@ public class TutorialController : MonoBehaviour
         }
     }
 
+    //start the tutorial
     public void StartTutorial()
     {
         if (baseTutorialPresets.Count > 0)
@@ -278,6 +288,7 @@ public class TutorialController : MonoBehaviour
         }
 
     }
+    //get tutorials completion state
     public bool CheckTutorialStateCompletion()
     {
         if (PlayerPrefs.GetString(playerPrefsString + addedTutorialsIndex.ToString()) != "Completed")
@@ -289,7 +300,7 @@ public class TutorialController : MonoBehaviour
             return false;
         }
     }
-
+    //go to a specified tutorial in the sequence
     public void JumpToSpecificTutorial(int tempIndex)
     {
         StartTutorial();
@@ -445,6 +456,8 @@ public class TutorialController : MonoBehaviour
         baseParent.SetActive(false);
 
     }
+
+    //dictate which mask should be active and used
     public void SetActiveMask(bool useAltMask)
     {
 
@@ -492,6 +505,11 @@ public class TutorialController : MonoBehaviour
 
 
     }
+
+    /// <summary>
+    /// Set all tutorial ui values
+    /// </summary>
+    /// <param name="tut"></param>
     void SetMask(TutorialScriptableObjects tut)
     {
         maskTransform.anchoredPosition = tut.maskPosition;

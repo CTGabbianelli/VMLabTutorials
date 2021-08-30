@@ -5,7 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 
-#if UNITY_Editor
+//#if UNITY_Editor
 [System.Serializable]
 public class MapTutorialEditor : EditorWindow
 {
@@ -28,24 +28,34 @@ public class MapTutorialEditor : EditorWindow
     TMP_Text buttonTitleText;
     [MenuItem("Tools/MapTutorialEditor")]
 
+    //show editor window
     public static void ShowMapWindow()
     {
         GetWindow(typeof(MapTutorialEditor));
     }
+    //Create All GUI elements
     private void OnGUI()
     {
-        tutorialController = GameObject.FindObjectOfType<TutorialController>();
 
+        //check if a tutorial controller already exists
         if (GameObject.FindObjectOfType<TutorialController>())
         {
+            //localize the tutorialController
+            tutorialController = GameObject.FindObjectOfType<TutorialController>();
+
+            //name for the window
             GUILayout.Label("Save Tutorial Preset", EditorStyles.boldLabel);
 
+            //input field for the scriptable object to be saved to and limit to TutorialMapScriptableObject type
             tutorialMapObject = EditorGUILayout.ObjectField("Tutorial Scriptable Object", tutorialMapObject, typeof(TutorialMapScriptableObject), false) as TutorialMapScriptableObject;
 
+            //create mask transform inputs
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Mask Transform", EditorStyles.boldLabel);
             maskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.mapMaskTransform, typeof(RectTransform), true) as RectTransform;
 
+            //buttons for saving transforms of normal mask or alternate mask
+            //alternate mask is used for changing size in certain interactions
             if (GUILayout.Button("Save Mask Transform"))
             {
                 SaveMaskTransform();
@@ -55,19 +65,25 @@ public class MapTutorialEditor : EditorWindow
                 SaveAltMaskTransform();
             }
 
+            //create secondary mask transform inputs
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Secondary Mask Transform", EditorStyles.boldLabel);
             secondaryMaskTransform = EditorGUILayout.ObjectField("Mask Rect Transform", tutorialController.mapSecondaryMaskTransform, typeof(RectTransform), true) as RectTransform;
 
+            //button for saving transforms of secondary mask
             if (GUILayout.Button("Save Secondary Mask Transform"))
             {
                 SaveSecondaryMask();
             }
 
+            //create secondary panel transform inputs
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Panel Transform", EditorStyles.boldLabel);
             panelTransform = EditorGUILayout.ObjectField("Panel Rect Transform", tutorialController.mapPanelBGTransform, typeof(RectTransform), true) as RectTransform;
             triangleTransform = EditorGUILayout.ObjectField("Triangle Rect Transform", tutorialController.mapArrowTransform, typeof(RectTransform), true) as RectTransform;
+
+            //buttons for saving transforms of normal panel or alternate panel
+            //alternate panel is used for changing size in certain interactions
             if (GUILayout.Button("Save Panel Transform"))
             {
                 SavePanelTransforms();
@@ -77,28 +93,35 @@ public class MapTutorialEditor : EditorWindow
                 SaveAltPanelTransforms();
             }
 
+            //create inputs for tutorial text
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Panel Text", EditorStyles.boldLabel);
             titleString = EditorGUILayout.TextField("Title", titleString);
             titleText = EditorGUILayout.ObjectField("Title Text", tutorialController.mapTitleText, typeof(TMP_Text), true) as TMP_Text;
             informationString = EditorGUILayout.TextField("Information", informationString);
             informationText = EditorGUILayout.ObjectField("Information Text", tutorialController.mapInformationText, typeof(TMP_Text), true) as TMP_Text;
+            
+            //save input text to scriptable object
             if (GUILayout.Button("Save Text"))
             {
                 SaveText();
             }
 
+            
+            //create inputs for the map guide buttons
             GUILayout.Label("", EditorStyles.boldLabel);
             GUILayout.Label("Save Map Button", EditorStyles.boldLabel);
             tutorialMapButtonTransform = EditorGUILayout.ObjectField("Map Button Rect Transform", tutorialMapButtonTransform, typeof(RectTransform), true) as RectTransform;
             buttonTitleString = EditorGUILayout.TextField("Button Title", buttonTitleString);
             buttonTitleText = EditorGUILayout.ObjectField("Button Title Text", buttonTitleText, typeof(TMP_Text), true) as TMP_Text;
+
+            //save button values to scriptable object
             if (GUILayout.Button("Save Map Button"))
             {
                 SaveMapButton();
             }
 
-
+            //update any changes made in the ui window
             if (GUI.changed)
             {
                 informationText.text = informationString;
@@ -118,12 +141,15 @@ public class MapTutorialEditor : EditorWindow
                 }
             }
 
+
+            //button for saving all tutorial aspects
             GUILayout.Label("", EditorStyles.boldLabel);
             if (GUILayout.Button("Save All"))
             {
                 SaveTutorial();
             }
         }
+        //if a tutorial controller does not exist Add button for user to create one
         else
         {
             GUILayout.Label("There is currently no tutorial system in the scene", EditorStyles.boldLabel);
@@ -135,6 +161,7 @@ public class MapTutorialEditor : EditorWindow
         }
 
     }
+    //save all aspects of tutorial
     private void SaveTutorial()
     {
         Undo.RecordObject(tutorialMapObject, "Set All");
@@ -147,24 +174,28 @@ public class MapTutorialEditor : EditorWindow
         SetMapButtonRect();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //only save first mask
     private void SaveMaskTransform()
     {
         Undo.RecordObject(tutorialMapObject,"Set Mask");
         SetMaskRect();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //only save secondary mask
     private void SaveSecondaryMask()
     {
         Undo.RecordObject(this, "Secondary Mask Changed");
         SetSecondaryMaskRect();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //only save alternate version of first mask
     private void SaveAltMaskTransform()
     {
         Undo.RecordObject(tutorialMapObject, "Set Alternate Mask");
         SetAltMaskRect();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //save all text assets
     public void SaveText()
     {
         Undo.RecordObject(tutorialMapObject, "Set Text");
@@ -172,6 +203,7 @@ public class MapTutorialEditor : EditorWindow
         SetInformationText();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //save all panel transforms
     public void SavePanelTransforms()
     {
         Undo.RecordObject(tutorialMapObject, "Set Panel");
@@ -179,6 +211,7 @@ public class MapTutorialEditor : EditorWindow
         SetTriangle();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //save all alt panel transforms
     public void SaveAltPanelTransforms()
     {
         Undo.RecordObject(tutorialMapObject, "Set Alternate Panel");
@@ -186,6 +219,7 @@ public class MapTutorialEditor : EditorWindow
         SetAltTriangle();
         EditorUtility.SetDirty(tutorialMapObject);
     }
+    //save aspects of the map button
     public void SaveMapButton()
     {
         Undo.RecordObject(tutorialMapObject, "Set Map Button");
@@ -239,4 +273,4 @@ public class MapTutorialEditor : EditorWindow
         tutorialMapObject.SetMapTitle(buttonTitleText.text);
     }
 }
-#endif
+//#endif
