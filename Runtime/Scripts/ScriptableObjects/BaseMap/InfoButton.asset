@@ -17,17 +17,40 @@ MonoBehaviour:
   maskAnchorMin: {x: 0.5, y: 0.5}
   maskAnchorMax: {x: 0.5, y: 0.5}
   maskPivot: {x: 0.5, y: 0.5}
+  usesAltMask: 0
+  maskAltPosition: {x: 0, y: 0, z: 0}
+  maskAltWidthAndHeight: {x: 0, y: 0}
+  maskAltAnchorMin: {x: 0, y: 0}
+  maskAltAnchorMax: {x: 0, y: 0}
+  maskAltPivot: {x: 0, y: 0}
+  usesSecondaryMask: 0
+  secondaryMaskPosition: {x: 0, y: 0, z: 0}
+  secondaryMaskWidthAndHeight: {x: 0, y: 0}
+  secondaryMaskAnchorMin: {x: 0, y: 0}
+  secondaryMaskAnchorMax: {x: 0, y: 0}
+  secondaryMaskPivot: {x: 0, y: 0}
   panelPosition: {x: 476, y: 458, z: 0}
   panelWidthAndHeight: {x: 500, y: 132.76}
   panelAnchorMin: {x: 0.5, y: 0.5}
   panelAnchorMax: {x: 0.5, y: 0.5}
   panelPivot: {x: 0.5, y: 0.5}
+  panelAltPosition: {x: 0, y: 0, z: 0}
+  panelAltWidthAndHeight: {x: 0, y: 0}
+  panelAltAnchorMin: {x: 0, y: 0}
+  panelAltAnchorMax: {x: 0, y: 0}
+  panelAltPivot: {x: 0, y: 0}
   trianglePosition: {x: 248, y: 41.1, z: 0}
   triangleWidthAndHeight: {x: 20, y: 20}
   triangleAnchorMin: {x: 0.5, y: 0.5}
   triangleAnchorMax: {x: 0.5, y: 0.5}
   trianglePivot: {x: 0.5, y: 0.5}
   triangleRotation: {x: -0, y: 0, z: 44.999996}
+  triangleAltPosition: {x: 0, y: 0, z: 0}
+  triangleAltWidthAndHeight: {x: 0, y: 0}
+  triangleAltAnchorMin: {x: 0, y: 0}
+  triangleAltAnchorMax: {x: 0, y: 0}
+  triangleAltPivot: {x: 0, y: 0}
+  triangleAltRotation: {x: 0, y: 0, z: 0}
   titleTextPosition: {x: 20, y: -10, z: 0}
   titleTextWidthAndHeight: {x: 225.5, y: 50}
   titleTextAnchorMin: {x: 0, y: 1}
@@ -40,7 +63,7 @@ MonoBehaviour:
   informationTextAnchorMin: {x: 0, y: 0}
   informationTextAnchorMax: {x: 1, y: 1}
   informationTextPivot: {x: 0.5, y: 0.5}
-  informationText: For more information about the simulation
+  informationText: For more information about the simulation.
   informationFontSize: 24
   buttonTitle: Help Button
   mapButtonPosition: {x: 788, y: 388, z: 0}
