@@ -295,6 +295,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8963349094212286239}
     m_Modifications:
+    - target: {fileID: 19567308523024309, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.b
+      value: 0.9339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 19567308523024309, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.g
+      value: 0.9339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 19567308523024309, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_Colors.m_NormalColor.r
+      value: 0.9339623
+      objectReference: {fileID: 0}
+    - target: {fileID: 19567309164457394, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 19567310102237778, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
       propertyPath: m_Name
@@ -405,6 +425,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 391720316705913217, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2971976029675283271, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -422,6 +447,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8623127776693033516, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
+      propertyPath: colorBleedMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8623127776693033516, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
       propertyPath: modifiedFromInspector
       value: 1
       objectReference: {fileID: 0}
@@ -432,8 +462,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8623127777646301689, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
+      propertyPath: colorBleedMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8623127777646301689, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
       propertyPath: modifiedFromInspector
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688429926619361639, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_fontColor.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688429926619361639, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 16777215
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688429927168080023, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: colorBleedMode
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2632e252aa1276144bed84a3688bf16d, type: 3}
