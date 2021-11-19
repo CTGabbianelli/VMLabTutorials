@@ -440,6 +440,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 3601970475700426089}
+    - target: {fileID: 5804633271122059802, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3601970475700426089}
+    - target: {fileID: 5804633271122059802, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: InformationButton, tutorialslibrary.vmlab.runtime
+      objectReference: {fileID: 0}
     - target: {fileID: 5825968588416654618, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
