@@ -122,7 +122,7 @@ PrefabInstance:
         type: 3}
       propertyPath: deviceInfoPanel
       value: 
-      objectReference: {fileID: 357955351584414890}
+      objectReference: {fileID: 0}
     - target: {fileID: 1072921547064081008, guid: 073681127cd8e9f4b84b88789944b77d,
         type: 3}
       propertyPath: tutorialButtons
@@ -313,6 +313,11 @@ PrefabInstance:
     - target: {fileID: 19567309164457394, guid: 2632e252aa1276144bed84a3688bf16d,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19567310102237776, guid: 2632e252aa1276144bed84a3688bf16d,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 19567310102237778, guid: 2632e252aa1276144bed84a3688bf16d,
@@ -508,12 +513,6 @@ MonoBehaviour:
 --- !u!1 &8944627010015793092 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 19567309769388428, guid: 2632e252aa1276144bed84a3688bf16d,
-    type: 3}
-  m_PrefabInstance: {fileID: 8963349093172166216}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &357955351584414890 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8688429927038132962, guid: 2632e252aa1276144bed84a3688bf16d,
     type: 3}
   m_PrefabInstance: {fileID: 8963349093172166216}
   m_PrefabAsset: {fileID: 0}
